@@ -1,6 +1,7 @@
 rc-sim-timer
 ===
 Project to manage RC Flight Simulators like Reflex or Phoenix.
+
 ---
 Features:
 
@@ -15,8 +16,13 @@ Required:
 * Push button with built-in light for UI effects
 * 4-digit 7-segment I2C display
 ---
-**WARNING**
+**WARNING #1**
 
 When connecting the Arduino Pro Micro, it may show up as "Arduino Leonardo" or "LilyPad Arduino USB".
 
 **DO NOT** change the board type in the Arduino IDE. You may brick the device (in a soft way),requiring you to reset the bootloader by double-resetting and loading an empty sketch to the device. 
+
+**WARNING #2**
+
+The push button (two individual items) used in this project was found to have + and - swapped...
+![Schematic](hw/schematic.png)
