@@ -6,9 +6,9 @@
 
 class LED:public LightDevice {
   public: // Overloaded base class functions
-    virtual void Begin(int pinLed, int levelOff, int levelOn);
-    virtual void Poll();      // time in ms. Not needed in LED but LED is parent to LedPushButton
-    void SetLevel(int level);
+    void Begin(int pinLed, int levelOff, int levelOn);
+    void Poll() override;      // time in ms. Not needed in LED but LED is parent to LedPushButton
+    void SetLevel(int level) override;
 
   protected:
     int m_pinLed;
