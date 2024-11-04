@@ -25,4 +25,4 @@ When connecting the Arduino Pro Micro, it may show up as "Arduino Leonardo" or "
 **WARNING #2**
 
 The push button (two individual items) used in this project was found to have + and - swapped...
-![Schematic](hw/schematic.png)
+![Schematic](hardware/schematic.png)
