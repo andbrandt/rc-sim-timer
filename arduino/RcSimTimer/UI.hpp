@@ -7,19 +7,9 @@
 #include "LedPushButton.hpp"
 #include "Simulator.hpp"
 #include "SimulatorPhoenix.hpp"
+#include "UiEvent.hpp"
 
-class UI {
-  public:
-    enum UiEvent {
-      Reset=0,
-      Setup=1,
-      Enter=2,
-      TimeNearEnd=3,
-      TimeAtEnd=4,
-      TimeArmed=5,
-      TimeUpdate=6,
-    };  
-
+class UI : public UiEvent {
   private:
     enum UiState {
       ModelSelect=0,
@@ -49,7 +39,6 @@ class UI {
     UiSimDuration             m_simDurationSelection;
     const char                m_simDurationSelectionString[3][5] = {"0200", "0500", "1000"};
     const unsigned long       m_simDuration_ms[3] = {120000, 300000, 600000};
-    ArduinoQueue<UI::UiEvent> *m_eventQueue;
     Display7Seg               *m_display7Seg;
     LedPushButton             *m_ledPushButton;
     bool                      m_countingDown;
@@ -70,7 +59,6 @@ class UI {
     unsigned long GetTimeRemaining(unsigned long time_ms);
     void CountDownService();
     void SelectSimAircraft();
-
     void EventService();
 
   public:
@@ -78,6 +66,5 @@ class UI {
     void Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton);
     void Poll();
     void StateSet(UiState state);
-    void EventPush(UiEvent event);
 };
 #endif

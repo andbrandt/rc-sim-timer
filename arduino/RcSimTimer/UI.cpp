@@ -2,11 +2,10 @@
 
 #include "UI.hpp"
 #include "Time.hpp"
-// Time time;
 
 UI::UI() {
   #define QUEUE_SIZE_ITEMS 10
-  m_eventQueue = new ArduinoQueue<UI::UiEvent>(10);
+  m_eventQueue = new ArduinoQueue<UI::UiEventsInternal>(10);
 }
 
 void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) {
@@ -23,10 +22,6 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) {
 void UI::Poll() {
   EventService();
   CountDownService();
-}
-
-void UI::EventPush(UiEvent event) {
-  if (!m_eventQueue->isFull()) m_eventQueue->enqueue(event);
 }
 
 void UI::StateSet(UiState state) {
