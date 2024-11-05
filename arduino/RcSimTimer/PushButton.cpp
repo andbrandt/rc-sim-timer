@@ -5,7 +5,7 @@
 #include "Time.hpp"
 // Time time;
 
-void PushButton::Begin(int pinPushButton, UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event) {
+void PushButton::Begin(int pinPushButton, UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event) {
   DEBUG_PRINT("PushButton::Begin");
   DEBUG_PRINT(longPressEvent);
   DEBUG_PRINT(shortPressX1Event);
@@ -15,6 +15,7 @@ void PushButton::Begin(int pinPushButton, UiEvent *uiEvent, UiEvent::UiEventsExt
 
   m_longPressEvent    = longPressEvent;
   m_shortPressX1Event = shortPressX1Event;
+  m_shortPressX2Event = shortPressX2Event;
 
   pinMode(m_pinPushButton, INPUT_PULLUP);
 }
@@ -63,7 +64,14 @@ void PushButton::HandleButtonEvent(ButtonEvent event) {
       m_uiEvent->EventPush(m_longPressEvent);
       break;
     case PushButton::SHORT_PRESS:
-      m_uiEvent->EventPush(m_shortPressX1Event);
+      if ((time.Now_ms() - m_shortPressTimeKeeper) < m_buttonPressLongDuration/4) {
+        m_shortPressCounter++;
+      } else {
+        m_shortPressCounter = 1;
+      }
+      m_shortPressTimeKeeper = time.Now_ms();
+      m_uiEvent->EventPush((m_shortPressCounter==1) ? m_shortPressX1Event : m_shortPressX2Event);
+
       break;
     default:
         break;

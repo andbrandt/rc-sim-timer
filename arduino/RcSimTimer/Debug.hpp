@@ -3,7 +3,7 @@
 
 #include <arduino.h>
 
-// b#define DEBUG 1
+// #define DEBUG 1
 
   #ifdef DEBUG
     #define DEBUG_SETUP()         {void DebugSetup();}

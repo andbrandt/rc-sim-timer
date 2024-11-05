@@ -6,13 +6,14 @@
 #include "Display7Seg.hpp"
 #include "LedPushButton.hpp"
 #include "Simulator.hpp"
-#include "SimulatorPhoenix.hpp"
 #include "UiEvent.hpp"
 
 class UI : public UiEvent {
   private:
+    const char m_versionString[5] = " 041";
+
     enum UiState {
-      ModelSelect=0,
+      SimulatorSelect=0,
       TimeSelect=1,
       SimArmed=2,
       SimRunning=3,
@@ -30,15 +31,22 @@ class UI : public UiEvent {
       SimDuration_2_00,
       SimDuration_5_00,
       SimDuration_99_99,
-      last_simduration,
+      last_simDuration,
+    };
+
+    enum UiSimApp {
+      SimApp_Phoenix,
+      SimApp_Reflex,
+      last_simApp,
     };
 
     UiState                   m_state;
     UiAircraft                m_aircraftSelection;
-    const char                m_aircraftSelectionString[2][5] = {"EASY", "Acro"};
     UiSimDuration             m_simDurationSelection;
+    UiSimApp                  m_simAppSelection;
     const char                m_simDurationSelectionString[3][5] = {"0200", "0500", "1000"};
     const unsigned long       m_simDuration_ms[3] = {120000, 300000, 600000};
+    const char                m_simAppSelectionString[2][5] = {"PHOE", "refl"};
     Display7Seg               *m_display7Seg;
     LedPushButton             *m_ledPushButton;
     bool                      m_countingDown;
@@ -62,6 +70,8 @@ class UI : public UiEvent {
     void EventService();
 
   public:
+    Simulator               *m_simAppSelection_apps[2];
+
     UI();
     void Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton);
     void Poll();
