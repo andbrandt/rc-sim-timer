@@ -30,7 +30,7 @@ void setup() {
   ledPcb.Begin(ONBOARD_LED_PIN, ONBOARD_LED_LEVEL_OFF, ONBOARD_LED_LEVEL_ON);
   ledPcb.Blink(true, 250, 250);
 
-  ledPushButton.Begin(PUSHBUTTON_PIN_LED, ONBOARD_LED_LEVEL_OFF, ONBOARD_LED_LEVEL_ON, PUSHBUTTON_PIN_SWITCH, &ui, UiEvent::Setup, UiEvent::Enter);
+ledPushButton.Begin(PUSHBUTTON_PIN_LED, ONBOARD_LED_LEVEL_OFF, ONBOARD_LED_LEVEL_ON, PUSHBUTTON_PIN_SWITCH, &ui, UiEvent::Setup, UiEvent::Enter, UiEvent::ModelToggle);
 
   ui.Begin(&display7Seg, &ledPushButton);
 }

@@ -3,6 +3,10 @@
 #include "UI.hpp"
 #include "Time.hpp"
 
+#include "Simulator.hpp"
+#include "SimulatorPhoenix.hpp"
+#include "SimulatorReflex.hpp"
+
 UI::UI() {
   #define QUEUE_SIZE_ITEMS 10
   m_eventQueue = new ArduinoQueue<UI::UiEventsInternal>(10);
@@ -12,10 +16,16 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) {
   m_display7Seg   = display7Seg;
   m_ledPushButton = ledPushButton;
 
-  m_aircraftSelection     = Easy;
-  m_simDurationSelection  = SimDuration_2_00;
+  m_aircraftSelection     = 0;
+  m_simDurationSelection  = 0;
+  m_simAppSelection       = 0;
+  m_simAppSelection_apps[SimApp_Phoenix] = new SimulatorPhoenix;
+  m_simAppSelection_apps[SimApp_Reflex] = new SimulatorReflex;
+  m_simulator = m_simAppSelection_apps[m_simAppSelection];
 
-  m_simulator = new SimulatorPhoenix;
+  m_display7Seg->SetColonOn(true);
+  m_display7Seg->Print(m_versionString);
+  delay(3000);
   EventPush(Reset);
 }
 
@@ -28,22 +38,24 @@ void UI::StateSet(UiState state) {
   m_state = state;
     
   switch(m_state) {
-    case ModelSelect:
+    case SimulatorSelect:
       StopCountDown();
-      m_display7Seg->Print("    ");
       m_display7Seg->SetColonOn(false);
       m_display7Seg->Blink(true, 800, 200);
       m_ledPushButton->Off();
+      m_display7Seg->Print(m_simAppSelectionString[m_simAppSelection]);
       break;
 
     case TimeSelect:
       m_display7Seg->SetColonOn(true);
       m_display7Seg->Blink(true, 800, 200);
       m_ledPushButton->Off();
+      m_display7Seg->Print(m_simDurationSelectionString[m_simDurationSelection]);
       break;
 
     case SimArmed:
       StopCountDown();
+      m_display7Seg->SetColonOn(false);
       m_display7Seg->Off();
       m_ledPushButton->On();
       break;
@@ -93,37 +105,37 @@ void UI::EventService() {
       break;
 
     case Setup:
+      DEBUG_PRINT("Setup");
+      DEBUG_PRINT(m_state);
       switch(m_state) {
-        case ModelSelect:
-          StateSet(TimeSelect);
-          m_display7Seg->Print(m_simDurationSelectionString[m_simDurationSelection]);
-          break;
-
         case TimeSelect:
           StateSet(SimArmed);
           break;
 
+        case SimulatorSelect:
+          StateSet(TimeSelect);
+          // m_display7Seg->Print(m_simDurationSelectionString[m_simDurationSelection]);
+          break;
+
         default:
-          StateSet(ModelSelect);
-          SelectSimAircraft();
-          m_display7Seg->Print(m_aircraftSelectionString[m_aircraftSelection]);
+          StateSet(SimulatorSelect);
           break;
       }
       break;
 
     case Enter:
       switch(m_state) {
-        case ModelSelect:
-          m_aircraftSelection = m_aircraftSelection+1;
-          if (m_aircraftSelection == last_aircraft) m_aircraftSelection = 0;
-          SelectSimAircraft();
-          m_display7Seg->Print(m_aircraftSelectionString[m_aircraftSelection]);
+        case SimulatorSelect:
+          m_simAppSelection = m_simAppSelection+1;
+          if (m_simAppSelection == last_simApp) m_simAppSelection = 0;
+          m_simulator = m_simAppSelection_apps[m_simAppSelection];
+          StateSet(m_state);
           break;
 
         case TimeSelect:
           m_simDurationSelection = m_simDurationSelection+1;
-          if (m_simDurationSelection == last_simduration) m_simDurationSelection = 0;
-          m_display7Seg->Print(m_simDurationSelectionString[m_simDurationSelection]);
+          if (m_simDurationSelection == last_simDuration) m_simDurationSelection = 0;
+          StateSet(m_state);
           break;
 
         case SimArmed:
@@ -146,6 +158,14 @@ void UI::EventService() {
             break;
       }
       break;
+
+    case ModelToggle:
+      if (m_state == SimArmed || m_state == SimRunning || m_state == SimEnding) {
+        m_aircraftSelection = m_aircraftSelection+1;
+        if (m_aircraftSelection == last_aircraft) m_aircraftSelection = 0;
+        SelectSimAircraft();
+      }
+    break;
 
     case TimeNearEnd:
       StateSet(SimEnding);

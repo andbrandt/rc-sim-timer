@@ -7,14 +7,15 @@
 class UiEvent {
   public:
     enum UiEventsExternal {
-      Reset,
       Setup,
       Enter,
+      ModelToggle,
       UiEventsExternalLast,
     };  
 
     enum UiEventsInternal {
-      TimeNearEnd=UiEvent::UiEventsExternalLast,
+      Reset=UiEventsExternalLast,
+      TimeNearEnd,
       TimeAtEnd,
       TimeArmed,
       TimeUpdate,

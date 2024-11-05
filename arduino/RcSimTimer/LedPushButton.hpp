@@ -7,7 +7,7 @@
 
 class LedPushButton:public LED, public PushButton {
   public: // Overloaded base class functions
-    void Begin(int pinLed, int levelOff, int levelOn, int pinPushButton, void *CallbackEvent, int longPressEvent, int shortPressX1Event);
+    void Begin(int pinLed, int levelOff, int levelOn, int pinPushButton, UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event);
     void Poll() override;
 };
 #endif
