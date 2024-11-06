@@ -101,6 +101,8 @@ void UI::EventService() {
   switch (event) {
     case Reset:
       StopCountDown();
+      m_simulator->UnBlock();
+      m_simulator->Block();
       StateSet(SimArmed);
       break;
 
@@ -114,11 +116,12 @@ void UI::EventService() {
 
         case SimulatorSelect:
           StateSet(TimeSelect);
-          // m_display7Seg->Print(m_simDurationSelectionString[m_simDurationSelection]);
           break;
 
         default:
           StateSet(SimulatorSelect);
+          m_simulator->UnBlock();
+          m_simulator->Block();
           break;
       }
       break;
@@ -141,8 +144,8 @@ void UI::EventService() {
         case SimArmed:
           StartCountDown(m_simDuration_ms[m_simDurationSelection]);
           StateSet(SimRunning);
-          m_simulator->Reset();
           m_simulator->UnBlock();
+          m_simulator->Reset();
           break;
         
         case SimRunning:

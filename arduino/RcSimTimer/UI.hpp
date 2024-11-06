@@ -10,7 +10,7 @@
 
 class UI : public UiEvent {
   private:
-    const char m_versionString[5] = " 041";
+    const char m_versionString[5] = "v041";
 
     enum UiState {
       SimulatorSelect=0,
