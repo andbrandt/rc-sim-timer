@@ -3,10 +3,9 @@
 #include "LED.hpp"
 #include "HAL.hpp"
 
-void LED::Begin(int pinLed, int levelOff, int levelOn) {
-  LightDevice::Begin(levelOff, levelOn);
+LED::LED(int pinLed, int levelOff, int levelOn) : LightDevice(levelOff, levelOn) 
+{
   m_pinLed      = pinLed;
-
   pinMode(pinLed, OUTPUT);
 }
 

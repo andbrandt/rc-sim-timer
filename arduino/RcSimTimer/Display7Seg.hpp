@@ -13,7 +13,7 @@ class Display7Seg:public LightDevice
 {
 
   public: // Overloaded base class functions
-    void Begin(int pinClk, int pinSda, int levelOff, int levelOn);
+    Display7Seg(int pinClk, int pinSda, int levelOff, int levelOn);
     void SetLevel(int level) override;       // Overloaded for 7 segment display control rather than PCB LED
 
   public: // Additional derived class functions

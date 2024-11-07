@@ -3,16 +3,15 @@
 #include "Display7Seg.hpp"
 #include "HAL.hpp"
 
-void Display7Seg::Begin(int pinClk, int pinSda, int levelOff, int levelOn) {
-  LightDevice::Begin(levelOff, levelOn);
+
+Display7Seg::Display7Seg(int pinClk, int pinSda, int levelOff, int levelOn) : LightDevice(levelOff, levelOn) 
+{
   m_pinClk      = pinClk;
   m_pinSda      = pinSda;
   m_colonEnable = false;
 
   m_display = new SevenSegmentTM1637(m_pinClk, m_pinSda);
   m_display->begin();
-
-  DEBUG_PRINT("Display7Seg::Begin");
 }
 
 void Display7Seg::Print(char *buf) {

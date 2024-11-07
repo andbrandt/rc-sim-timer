@@ -5,19 +5,22 @@
 #include "Time.hpp"
 // Time time;
 
-void PushButton::Begin(int pinPushButton, UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event) {
+PushButton::PushButton(int pinPushButton) {
+  m_pinPushButton = pinPushButton;
+  pinMode(m_pinPushButton, INPUT_PULLUP);
+}
+
+void PushButton::Begin(UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event) {
   DEBUG_PRINT("PushButton::Begin");
   DEBUG_PRINT(longPressEvent);
   DEBUG_PRINT(shortPressX1Event);
+  DEBUG_PRINT(shortPressX2Event);
 
-  m_pinPushButton = pinPushButton;
   m_uiEvent = uiEvent;
 
   m_longPressEvent    = longPressEvent;
   m_shortPressX1Event = shortPressX1Event;
   m_shortPressX2Event = shortPressX2Event;
-
-  pinMode(m_pinPushButton, INPUT_PULLUP);
 }
 
 void PushButton::Poll() {

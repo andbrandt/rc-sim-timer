@@ -10,7 +10,8 @@ class PushButton {
       LONG_PRESS,
       SHORT_PRESS,
     };
-    virtual void PushButton::Begin(int pinPushButton, UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event);
+    PushButton(int pinPushButton);
+    virtual void PushButton::Begin(UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event);
     virtual void Poll();      // time in ms.
     void ButtonScanService();
 

@@ -11,7 +11,7 @@
 
 class LightDevice {
   public:
-    virtual void Begin(int levelOff, int levelOn);
+    LightDevice(int levelOff, int levelOn);
     virtual void Poll();      // time in ms.
     void Blink(bool enable, int periodOn_ms, int periodOff_ms);
     void On();

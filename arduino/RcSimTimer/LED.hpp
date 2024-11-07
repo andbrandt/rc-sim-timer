@@ -5,8 +5,9 @@
 #include "LightDevice.hpp"
 
 class LED:public LightDevice {
-  public: // Overloaded base class functions
-    void Begin(int pinLed, int levelOff, int levelOn);
+  public: 
+    LED(int pinLed, int levelOff, int levelOn);
+    // Overloaded base class functions
     void Poll() override;      // time in ms. Not needed in LED but LED is parent to LedPushButton
     void SetLevel(int level) override;
 

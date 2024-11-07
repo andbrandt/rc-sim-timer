@@ -5,10 +5,10 @@
 #include "Time.hpp"
 // Time time;
 
-void LightDevice::Begin(int levelOff, int levelOn) {
+LightDevice::LightDevice(int levelOff, int levelOn)
+{
   m_levelOff    = levelOff;
   m_levelOn     = levelOn;
-  DEBUG_PRINT("LightDevice::Begin");
 }
 
 void LightDevice::Poll() {      // time in ms.
