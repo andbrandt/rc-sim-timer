@@ -4,22 +4,26 @@
 #include <Keyboard.h>
 #include "SimulatorPhoenix.hpp"
 
-void SimulatorPhoenix::Reset() {
+void SimulatorPhoenix::Restart() 
+{
   Keyboard.write('b');
 }
 
-void SimulatorPhoenix::Block() {
+void SimulatorPhoenix::Block() 
+{
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');
   Keyboard.release(KEY_RIGHT_CTRL);  
 }
 
-void SimulatorPhoenix::UnBlock() {
+void SimulatorPhoenix::UnBlock() 
+{
   Keyboard.write(KEY_ESC);
 }
 
-void SimulatorPhoenix::EasyAircraft() {
+void SimulatorPhoenix::EasyAircraft() 
+{
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');
@@ -35,7 +39,8 @@ void SimulatorPhoenix::EasyAircraft() {
   Keyboard.write(KEY_RETURN);
 }
 
-void SimulatorPhoenix::AcroAircraft() {
+void SimulatorPhoenix::AcroAircraft() 
+{
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');

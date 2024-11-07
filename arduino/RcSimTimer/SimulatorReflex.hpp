@@ -5,7 +5,7 @@
 
 class SimulatorReflex:public Simulator {
   public:
-    void Reset();
+    void Restart();
     void Block();
     void UnBlock();
     void EasyAircraft();

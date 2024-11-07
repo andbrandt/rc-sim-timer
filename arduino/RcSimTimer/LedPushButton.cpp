@@ -7,12 +7,14 @@ LedPushButton::LedPushButton(int pinLed, int levelOff, int levelOn, int pinPushB
 {
 }
 
-void LedPushButton::Begin(UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event) {
+void LedPushButton::Begin(UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event) 
+{
   PushButton::Begin(uiEvent, longPressEvent, shortPressX1Event, shortPressX2Event);
   DEBUG_PRINT("LedPushButton::Begin");
 }
 
-void LedPushButton::Poll() {      // time in ms.
+void LedPushButton::Poll() 
+{
   LED::Poll();
   PushButton::Poll();
 }

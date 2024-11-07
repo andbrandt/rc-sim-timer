@@ -4,22 +4,26 @@
 #include <Keyboard.h>
 #include "SimulatorReflex.hpp"
 
-void SimulatorReflex::Reset() {
+void SimulatorReflex::Restart() 
+{
   Keyboard.write('r');
 }
 
-void SimulatorReflex::Block() {
+void SimulatorReflex::Block() 
+{
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');
   Keyboard.release(KEY_RIGHT_CTRL);  
 }
 
-void SimulatorReflex::UnBlock() {
+void SimulatorReflex::UnBlock() 
+{
   Keyboard.write(KEY_ESC);
 }
 
-void SimulatorReflex::EasyAircraft() {
+void SimulatorReflex::EasyAircraft() 
+{
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');
@@ -35,7 +39,8 @@ void SimulatorReflex::EasyAircraft() {
   Keyboard.write(KEY_RETURN);
 }
 
-void SimulatorReflex::AcroAircraft() {
+void SimulatorReflex::AcroAircraft() 
+{
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');

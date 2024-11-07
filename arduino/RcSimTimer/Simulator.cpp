@@ -1,16 +1,21 @@
 #include "Simulator.hpp"
 
-void Simulator::Reset() {
+void Simulator::Restart() 
+{
 }
 
-void Simulator::Block() {
+void Simulator::Block() 
+{
 }
 
-void Simulator::UnBlock() {
+void Simulator::UnBlock() 
+{
 }
 
-void Simulator::EasyAircraft() {
+void Simulator::EasyAircraft() 
+{
 }
 
-void Simulator::AcroAircraft() {
+void Simulator::AcroAircraft() 
+{
 }

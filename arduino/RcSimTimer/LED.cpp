@@ -9,11 +9,13 @@ LED::LED(int pinLed, int levelOff, int levelOn) : LightDevice(levelOff, levelOn)
   pinMode(pinLed, OUTPUT);
 }
 
-void LED::Poll() {      // time in ms.
+void LED::Poll()       // time in ms.
+{
   LightDevice::Poll();
 }
 
-void LED::SetLevel(int level) {
+void LED::SetLevel(int level) 
+{
   LightDevice::SetLevel(level);
   digitalWrite(m_pinLed, m_level);
 }

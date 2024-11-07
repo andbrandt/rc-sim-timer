@@ -8,7 +8,7 @@
 
 class SimulatorPhoenix:public Simulator {
   public:
-    void Reset();
+    void Restart();
     void Block();
     void UnBlock();
     void EasyAircraft();

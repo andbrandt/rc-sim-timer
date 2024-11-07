@@ -1,7 +1,8 @@
 #include "Debug.hpp"
 
 #ifdef DEBUG
-void DebugSetup() {
+void DebugSetup() 
+{
   Serial.begin(9600);
 
   while (!Serial) {

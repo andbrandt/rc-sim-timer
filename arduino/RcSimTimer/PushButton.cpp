@@ -5,12 +5,14 @@
 #include "Time.hpp"
 // Time time;
 
-PushButton::PushButton(int pinPushButton) {
+PushButton::PushButton(int pinPushButton) 
+{
   m_pinPushButton = pinPushButton;
   pinMode(m_pinPushButton, INPUT_PULLUP);
 }
 
-void PushButton::Begin(UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event) {
+void PushButton::Begin(UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEvent, UiEvent::UiEventsExternal shortPressX1Event, UiEvent::UiEventsExternal shortPressX2Event) 
+{
   DEBUG_PRINT("PushButton::Begin");
   DEBUG_PRINT(longPressEvent);
   DEBUG_PRINT(shortPressX1Event);
@@ -23,11 +25,13 @@ void PushButton::Begin(UiEvent *uiEvent, UiEvent::UiEventsExternal longPressEven
   m_shortPressX2Event = shortPressX2Event;
 }
 
-void PushButton::Poll() {
+void PushButton::Poll() 
+{
   ButtonScanService();
 }
 
-void PushButton::ButtonScanService() {
+void PushButton::ButtonScanService() 
+{
   if (digitalRead(m_pinPushButton)) {
     // Button not pressed
     if (m_buttonDownTimestamp) {
@@ -59,7 +63,8 @@ void PushButton::ButtonScanService() {
   }
 }
 
-void PushButton::HandleButtonEvent(ButtonEvent event) {
+void PushButton::HandleButtonEvent(ButtonEvent event) 
+{
   DEBUG_PRINT("PushButton::HandleButtonEvent");
   DEBUG_PRINT(event);
   switch (event) {

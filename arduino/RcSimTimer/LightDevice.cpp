@@ -11,11 +11,13 @@ LightDevice::LightDevice(int levelOff, int levelOn)
   m_levelOn     = levelOn;
 }
 
-void LightDevice::Poll() {      // time in ms.
+void LightDevice::Poll()       // time in ms.
+{
   BlinkService();
 }
 
-void LightDevice::Blink(bool enable, int periodOn, int periodOff) {     // Blink per second; Start at next poll event; Start with ON state
+void LightDevice::Blink(bool enable, int periodOn, int periodOff)      // Blink per second; Start at next poll event; Start with ON state
+{
   // DEBUG_PRINT("LightDevice::Blink");
   m_blinkEnable = enable;
   if (m_blinkEnable) {
@@ -32,7 +34,8 @@ void LightDevice::Blink(bool enable, int periodOn, int periodOff) {     // Blink
 }
 
 // Service is inactive if m_blinkPeriodOn is zero
-void LightDevice::BlinkService() {
+void LightDevice::BlinkService() 
+{
   if (m_blinkEnable) {
     if (m_blinkTriggerTimeOn < time.Now_ms()) {
       SetLevel(m_levelOn);
@@ -46,17 +49,20 @@ void LightDevice::BlinkService() {
   }
 }
 
-void LightDevice::On() {
+void LightDevice::On() 
+{
   m_blinkEnable=false;
   SetLevel(m_levelOn);
 }
 
-void LightDevice::Off() {
+void LightDevice::Off() 
+{
   m_blinkEnable=false;
   SetLevel(m_levelOff);
 }
 
-void LightDevice::SetLevel(int level) {
+void LightDevice::SetLevel(int level) 
+{
   // DEBUG_PRINT("LightDevice::SetLevel");
   m_level=level;
   // Leave it for specialization functions to do actual HW writing

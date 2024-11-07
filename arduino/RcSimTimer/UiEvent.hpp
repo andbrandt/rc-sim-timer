@@ -14,7 +14,7 @@ class UiEvent {
     };  
 
     enum UiEventsInternal {
-      Reset=UiEventsExternalLast,
+      Restart=UiEventsExternalLast,
       TimeNearEnd,
       TimeAtEnd,
       TimeArmed,

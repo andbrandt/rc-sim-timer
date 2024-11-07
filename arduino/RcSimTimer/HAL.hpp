@@ -17,8 +17,8 @@
 // Defines for pushbutton w. builtin LED
 #define PUSHBUTTON_PIN_SWITCH 14
 #define PUSHBUTTON_PIN_LED    10
-#define ONBOARD_LED_LEVEL_ON  255
-#define ONBOARD_LED_LEVEL_OFF 0
+#define PUSHBUTTON_LED_LEVEL_ON  255
+#define PUSHBUTTON_LED_LEVEL_OFF 0
 
 // Defines for joystick
 #define JOYSTICK_PIN_BUTTON   PD6

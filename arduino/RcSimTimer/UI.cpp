@@ -7,12 +7,14 @@
 #include "SimulatorPhoenix.hpp"
 #include "SimulatorReflex.hpp"
 
-UI::UI() {
+UI::UI() 
+{
   #define QUEUE_SIZE_ITEMS 10
   m_eventQueue = new ArduinoQueue<UI::UiEventsInternal>(10);
 }
 
-void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) {
+void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) 
+{
   m_display7Seg   = display7Seg;
   m_ledPushButton = ledPushButton;
 
@@ -23,46 +25,48 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) {
   m_simAppSelection_apps[SimApp_Reflex] = new SimulatorReflex;
   m_simulator = m_simAppSelection_apps[m_simAppSelection];
 
-  m_display7Seg->SetColonOn(true);
-  m_display7Seg->Print(m_versionString);
+  m_display7Seg->setColonOn(true);
+  m_display7Seg->print(m_versionString);
   delay(3000);
-  EventPush(Reset);
+  EventPush(Restart);
 }
 
-void UI::Poll() {
+void UI::Poll() 
+{
   EventService();
   CountDownService();
 }
 
-void UI::StateSet(UiState state) {
+void UI::StateSet(UiState state) 
+{
   m_state = state;
     
   switch(m_state) {
     case SimulatorSelect:
       StopCountDown();
-      m_display7Seg->SetColonOn(false);
+      m_display7Seg->setColonOn(false);
       m_display7Seg->Blink(true, 800, 200);
       m_ledPushButton->Off();
-      m_display7Seg->Print(m_simAppSelectionString[m_simAppSelection]);
+      m_display7Seg->print(m_simAppSelectionString[m_simAppSelection]);
       break;
 
     case TimeSelect:
-      m_display7Seg->SetColonOn(true);
+      m_display7Seg->setColonOn(true);
       m_display7Seg->Blink(true, 800, 200);
       m_ledPushButton->Off();
-      m_display7Seg->Print(m_simDurationSelectionString[m_simDurationSelection]);
+      m_display7Seg->print(m_simDurationSelectionString[m_simDurationSelection]);
       break;
 
     case SimArmed:
       StopCountDown();
-      m_display7Seg->SetColonOn(false);
+      m_display7Seg->setColonOn(false);
       m_display7Seg->Off();
       m_ledPushButton->On();
       break;
 
     case SimRunning:
-      m_display7Seg->Print("    ");
-      m_display7Seg->SetColonOn(true);
+      m_display7Seg->print("    ");
+      m_display7Seg->setColonOn(true);
       m_display7Seg->On();
       m_ledPushButton->On();
       break;
@@ -99,7 +103,7 @@ void UI::EventService() {
 
   auto event = m_eventQueue->dequeue();
   switch (event) {
-    case Reset:
+    case Restart:
       StopCountDown();
       m_simulator->UnBlock();
       m_simulator->Block();
@@ -145,15 +149,15 @@ void UI::EventService() {
           StartCountDown(m_simDuration_ms[m_simDurationSelection]);
           StateSet(SimRunning);
           m_simulator->UnBlock();
-          m_simulator->Reset();
+          m_simulator->Restart();
           break;
         
         case SimRunning:
-          m_simulator->Reset();
+          m_simulator->Restart();
           break;
 
         case SimEnding:
-          m_simulator->Reset();
+          m_simulator->Restart();
           break;
 
         // cases SimEnding &  SimReArming are updated by countdown events
@@ -195,7 +199,7 @@ void UI::EventService() {
       } else {
         sprintf(buf, "  %02d", simTimeRemainingSec);
       }
-      m_display7Seg->Print(buf);
+      m_display7Seg->print(buf);
       break;
 
     default:
@@ -206,7 +210,8 @@ void UI::EventService() {
 // ------------------- CountDown related functions ----------------------
 
 void
-UI::StartCountDown(unsigned long countDownPeriod_ms) {
+UI::StartCountDown(unsigned long countDownPeriod_ms) 
+{
   // UiEventTime eventTime;
 UiEvent       event;
 
@@ -218,16 +223,19 @@ UiEvent       event;
 }
 
 void
-UI::StopCountDown() {
+UI::StopCountDown() 
+{
   m_countingDown = false;
 }
 
 unsigned long
-UI::GetTimeRemaining(unsigned long time_ms) {
+UI::GetTimeRemaining(unsigned long time_ms) 
+{
   return (m_timeEndTrigger_ms == -1) ? 0 : m_timeEndTrigger_ms - time_ms;
 }
 
-void UI::CountDownService() {
+void UI::CountDownService() 
+{
   if (m_countingDown) {
     if (m_timeUpdateTrigger_ms < time.Now_ms()) {
       EventPush(TimeUpdate);

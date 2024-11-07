@@ -8,13 +8,8 @@
 class Simulator {
   public:
     virtual ~Simulator() = default;
-    // enum SimApp {
-    //       Phoenix,
-    //       Reflex,
-    //       last_simapp,
-    //     };  
 
-    virtual void Reset();
+    virtual void Restart();
     virtual void Block();
     virtual void UnBlock();
     virtual void EasyAircraft();
