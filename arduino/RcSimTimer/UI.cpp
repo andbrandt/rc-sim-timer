@@ -5,7 +5,8 @@
 
 #include "Simulator.hpp"
 #include "SimulatorPhoenix.hpp"
-#include "SimulatorReflex.hpp"
+#include "SimulatorRealFlight9.hpp".hpp"
+#include "SimulatorRealFlightBasic.hpp".hpp"
 
 UI::UI() 
 {
@@ -22,7 +23,8 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton)
   m_simDurationSelection  = 0;
   m_simAppSelection       = 0;
   m_simAppSelection_apps[SimApp_Phoenix] = new SimulatorPhoenix;
-  m_simAppSelection_apps[SimApp_Reflex] = new SimulatorReflex;
+  m_simAppSelection_apps[SimApp_RealFlight9] = new SimulatorRealFlight9;
+  m_simAppSelection_apps[SimApp_RealFlightBasic] = new SimulatorRealFlightBasic;
   m_simulator = m_simAppSelection_apps[m_simAppSelection];
 
   m_display7Seg->setColonOn(true);
@@ -134,14 +136,14 @@ void UI::EventService() {
       switch(m_state) {
         case SimulatorSelect:
           m_simAppSelection = m_simAppSelection+1;
-          if (m_simAppSelection == last_simApp) m_simAppSelection = 0;
+          if (m_simAppSelection == simApp_last) m_simAppSelection = 0;
           m_simulator = m_simAppSelection_apps[m_simAppSelection];
           StateSet(m_state);
           break;
 
         case TimeSelect:
           m_simDurationSelection = m_simDurationSelection+1;
-          if (m_simDurationSelection == last_simDuration) m_simDurationSelection = 0;
+          if (m_simDurationSelection == simDuration_last) m_simDurationSelection = 0;
           StateSet(m_state);
           break;
 
@@ -169,7 +171,7 @@ void UI::EventService() {
     case ModelToggle:
       if (m_state == SimArmed || m_state == SimRunning || m_state == SimEnding) {
         m_aircraftSelection = m_aircraftSelection+1;
-        if (m_aircraftSelection == last_aircraft) m_aircraftSelection = 0;
+        if (m_aircraftSelection == Aircraft_last) m_aircraftSelection = 0;
         SelectSimAircraft();
       }
     break;

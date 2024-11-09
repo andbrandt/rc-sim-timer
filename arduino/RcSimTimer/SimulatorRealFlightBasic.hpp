@@ -1,9 +1,9 @@
-#ifndef SimulatorReflex_h
-#define SimulatorReflex_h
+#ifndef SimulatorRealFlightBasic_h
+#define SimulatorRealFlightBasic_h
 
 #include "Simulator.hpp"
 
-class SimulatorReflex:public Simulator {
+class SimulatorRealFlightBasic:public Simulator {
   public:
     void Restart();
     void Block();
