@@ -1,6 +1,12 @@
 rc-sim-timer
 ===
-Project to manage RC Flight Simulators like Reflex or Phoenix.
+Project to manage RC Flight Simulators via an Arduino-based control panel.
+
+Currently supported simulators:
+
+* Phoenix v4
+* RealFlight Basic
+* RealFlight v9
 
 ---
 # Features:
