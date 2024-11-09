@@ -6,11 +6,17 @@
 
 void SimulatorPhoenix::Restart() 
 {
+  // Always start unblocking - in case sim is currently blocked
+  UnBlock();
+  
   Keyboard.write('b');
 }
 
 void SimulatorPhoenix::Block() 
 {
+  // Always start unblocking - in case sim is currently blocked
+  UnBlock();
+
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');
@@ -24,6 +30,9 @@ void SimulatorPhoenix::UnBlock()
 
 void SimulatorPhoenix::EasyAircraft() 
 {
+  // Always start unblocking - in case sim is currently blocked
+  UnBlock();
+  
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');
@@ -41,6 +50,9 @@ void SimulatorPhoenix::EasyAircraft()
 
 void SimulatorPhoenix::AcroAircraft() 
 {
+  // Always start unblocking - in case sim is currently blocked
+  UnBlock();
+  
   Keyboard.press(KEY_RIGHT_CTRL);
   Keyboard.press('m');
   Keyboard.release('m');

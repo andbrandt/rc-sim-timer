@@ -10,7 +10,7 @@
 
 class UI : public UiEvent {
   private:
-    const char m_versionString[5] = "v041";
+    const char m_versionString[5] = "v042";
 
     enum UiState {
       SimulatorSelect=0,
@@ -24,33 +24,35 @@ class UI : public UiEvent {
     enum UiAircraft {
       Easy,
       Acro,
-      last_aircraft,
+      Aircraft_last,
     };
 
     enum UiSimDuration {
       SimDuration_2_00,
       SimDuration_5_00,
       SimDuration_99_99,
-      last_simDuration,
+      simDuration_last,
     };
 
     enum UiSimApp {
       SimApp_Phoenix,
-      SimApp_Reflex,
-      last_simApp,
+      SimApp_RealFlight9,
+      SimApp_RealFlightBasic,
+      simApp_last,
     };
 
     UiState                   m_state;
     UiAircraft                m_aircraftSelection;
     UiSimDuration             m_simDurationSelection;
     UiSimApp                  m_simAppSelection;
-    const char                m_simDurationSelectionString[3][5] = {"0200", "0500", "1000"};
-    const unsigned long       m_simDuration_ms[3] = {120000, 300000, 600000};
-    const char                m_simAppSelectionString[2][5] = {"PHOE", "refl"};
+    const char                m_simDurationSelectionString[simDuration_last][5] = {"0200", "0500", "1000"};
+    const unsigned long       m_simDuration_ms[simDuration_last] = {10000, 300000, 600000}; // {120000, 300000, 600000};
     Display7Seg               *m_display7Seg;
     LedPushButton             *m_ledPushButton;
     bool                      m_countingDown;
     Simulator                 *m_simulator;
+    Simulator                 *m_simAppSelection_apps[simApp_last];
+    const char                m_simAppSelectionString[simApp_last][5] = {"PHOE", "rf_9", "rf_b"};
 
 // CountDown control data
     unsigned long m_timeEndPeriod_ms;                   // Period from start (after armed) to end when sim is paused - controlled in runtime
@@ -70,7 +72,6 @@ class UI : public UiEvent {
     void EventService();
 
   public:
-    Simulator               *m_simAppSelection_apps[2];
 
     UI();
     void Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton);
