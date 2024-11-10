@@ -8,7 +8,7 @@ Display7Seg::Display7Seg(int pinClk, int pinSda, int levelOff, int levelOn) : Se
 {
 }
 
-void Display7Seg::Begin() 
+void Display7Seg::Begin()
 {
   SevenSegmentTM1637::begin();
 }
@@ -17,5 +17,5 @@ void Display7Seg::SetLevel(int level)
 {
   LightDevice::SetLevel(level);
   DEBUG_PRINT("Display7Seg::SetLevel");
-  SevenSegmentTM1637::setBacklight(m_level);
+  SevenSegmentTM1637::setBacklight(level);
 }

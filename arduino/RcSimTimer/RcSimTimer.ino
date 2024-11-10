@@ -35,17 +35,17 @@ void setup()
   DEBUG_SETUP();
   time.Begin();
 
+  display7Seg.Begin();
   ledPcb.Blink(true, 250, 250);
   ledPushButton.Begin(&ui, UiEvent::Setup, UiEvent::Enter, UiEvent::ModelToggle);
-  display7Seg.Begin();
   ui.Begin(&display7Seg, &ledPushButton);
 }
 
 void loop() 
 {
   time.Poll();
+  ui.Poll();
   display7Seg.Poll();
   ledPcb.Poll();
   ledPushButton.Poll();
-  ui.Poll();
 }

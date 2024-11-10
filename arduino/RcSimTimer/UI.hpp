@@ -7,10 +7,11 @@
 #include "LedPushButton.hpp"
 #include "Simulator.hpp"
 #include "UiEvent.hpp"
+#include "Debug.hpp"
 
 class UI : public UiEvent {
   private:
-    const char m_versionString[5] = "v042";
+    const char m_versionString[5] = "v085";
 
     enum UiState {
       SimulatorSelect=0,
@@ -46,7 +47,11 @@ class UI : public UiEvent {
     UiSimDuration             m_simDurationSelection;
     UiSimApp                  m_simAppSelection;
     const char                m_simDurationSelectionString[simDuration_last][5] = {"0200", "0500", "1000"};
-    const unsigned long       m_simDuration_ms[simDuration_last] = {10000, 300000, 600000}; // {120000, 300000, 600000};
+#ifdef DEBUG
+    const unsigned long       m_simDuration_ms[simDuration_last] = { 10000,  30000,  60000};
+#else    
+    const unsigned long       m_simDuration_ms[simDuration_last] = {120000, 300000, 600000};
+#endif    
     Display7Seg               *m_display7Seg;
     LedPushButton             *m_ledPushButton;
     bool                      m_countingDown;
@@ -56,9 +61,14 @@ class UI : public UiEvent {
 
 // CountDown control data
     unsigned long m_timeEndPeriod_ms;                   // Period from start (after armed) to end when sim is paused - controlled in runtime
-    const unsigned long m_timeNearEndPeriod_ms = 15000; // Period before end when display is blinking
+#ifdef DEBUG
+    const unsigned long m_timeNearEndPeriod_ms  = 7000; // Period before end when display is blinking
+    const unsigned long m_timeRearmingPeriod_ms = 2000; // Period that follows after sim is paused
+#else
+    const unsigned long m_timeNearEndPeriod_ms  = 15000; // 15000; // Period before end when display is blinking
     const unsigned long m_timeRearmingPeriod_ms = 5000; // Period that follows after sim is paused
-
+#endif
+    const unsigned long m_timeTriggerInfinite   = 0xffffffff;
     unsigned long m_timeEndTrigger_ms;                  // The time at which the sim is paused
     unsigned long m_timeNearEndTrigger_ms;              // The time at which the display starts blinking
     unsigned long m_timeArmed_ms;                       // The time at which the system is armed again

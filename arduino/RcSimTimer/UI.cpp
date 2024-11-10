@@ -30,7 +30,7 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton)
   m_display7Seg->setColonOn(true);
   m_display7Seg->print(m_versionString);
   delay(3000);
-  EventPush(Restart);
+  EventPush(Reset);
 }
 
 void UI::Poll() 
@@ -105,11 +105,10 @@ void UI::EventService() {
 
   auto event = m_eventQueue->dequeue();
   switch (event) {
-    case Restart:
-      StopCountDown();
-      m_simulator->UnBlock();
-      m_simulator->Block();
+    case Reset:
       StateSet(SimArmed);
+      StopCountDown();
+      m_simulator->Block();
       break;
 
     case Setup:
@@ -126,7 +125,6 @@ void UI::EventService() {
 
         default:
           StateSet(SimulatorSelect);
-          m_simulator->UnBlock();
           m_simulator->Block();
           break;
       }
@@ -135,22 +133,22 @@ void UI::EventService() {
     case Enter:
       switch(m_state) {
         case SimulatorSelect:
+          StateSet(m_state);
           m_simAppSelection = m_simAppSelection+1;
           if (m_simAppSelection == simApp_last) m_simAppSelection = 0;
           m_simulator = m_simAppSelection_apps[m_simAppSelection];
-          StateSet(m_state);
           break;
 
         case TimeSelect:
+          StateSet(m_state);
           m_simDurationSelection = m_simDurationSelection+1;
           if (m_simDurationSelection == simDuration_last) m_simDurationSelection = 0;
           StateSet(m_state);
           break;
 
         case SimArmed:
-          StartCountDown(m_simDuration_ms[m_simDurationSelection]);
           StateSet(SimRunning);
-          m_simulator->UnBlock();
+          StartCountDown(m_simDuration_ms[m_simDurationSelection]+1000);  // Also include time = 0 for best user experience
           m_simulator->Restart();
           break;
         
@@ -196,12 +194,16 @@ void UI::EventService() {
       unsigned int simTimeRemainingSec = timeRemaining % 60;
 
       char buf[5];
-      if (simTimeRemainingMin>0) {
-      sprintf(buf, " %1d%02d", simTimeRemainingMin, simTimeRemainingSec);
-      } else {
-        sprintf(buf, "  %02d", simTimeRemainingSec);
-      }
-      m_display7Seg->print(buf);
+      // if (timeRemaining>0) {
+        if (simTimeRemainingMin>0) {
+        sprintf(buf, " %1d%02d", simTimeRemainingMin, simTimeRemainingSec);
+        } else {
+          sprintf(buf, "  %02d", simTimeRemainingSec);
+        }
+        m_display7Seg->print(buf);
+      // } else {
+      //   m_display7Seg->print("    ");
+      // }
       break;
 
     default:
@@ -218,7 +220,7 @@ UI::StartCountDown(unsigned long countDownPeriod_ms)
 UiEvent       event;
 
   m_timeEndTrigger_ms     = time.Now_ms() + countDownPeriod_ms;                   // event at time end  
-  m_timeNearEndTrigger_ms = m_timeEndTrigger_ms - m_timeNearEndPeriod_ms;   // event x msec before time end to warn user
+  m_timeNearEndTrigger_ms = m_timeEndTrigger_ms - m_timeNearEndPeriod_ms - 1000;   // event x msec before time end to warn user - and add time = 0 for best user experience
   m_timeArmed_ms   = m_timeEndTrigger_ms + m_timeRearmingPeriod_ms;         // event x msec after time end to nudge user to leave
   m_timeUpdateTrigger_ms  = time.Now_ms();
   m_countingDown = true;
@@ -233,7 +235,7 @@ UI::StopCountDown()
 unsigned long
 UI::GetTimeRemaining(unsigned long time_ms) 
 {
-  return (m_timeEndTrigger_ms == -1) ? 0 : m_timeEndTrigger_ms - time_ms;
+  return (m_countingDown) ? m_timeEndTrigger_ms - time_ms : 0;
 }
 
 void UI::CountDownService() 
@@ -246,18 +248,19 @@ void UI::CountDownService()
 
     if (m_timeNearEndTrigger_ms < time.Now_ms()) {
       EventPush(TimeNearEnd);
-      m_timeNearEndTrigger_ms = -1;
+      m_timeNearEndTrigger_ms = m_timeTriggerInfinite;
     }
 
-    if (m_timeEndTrigger_ms < time.Now_ms() - time.GetTimerInterval_ms()) {
+    // if (m_timeEndTrigger_ms < time.Now_ms() - time.GetTimerInterval_ms()) {
+    if (m_timeEndTrigger_ms < time.Now_ms()) {
       EventPush(TimeAtEnd);
-      m_timeEndTrigger_ms = -1;
-      m_timeUpdateTrigger_ms = -1;
+      m_timeEndTrigger_ms = m_timeTriggerInfinite;
+      m_timeUpdateTrigger_ms = m_timeTriggerInfinite;
     }
 
     if (m_timeArmed_ms < time.Now_ms()) {
       EventPush(TimeArmed);
-      m_timeArmed_ms = -1;
+      m_timeArmed_ms = m_timeTriggerInfinite;
     }
   }
 }
