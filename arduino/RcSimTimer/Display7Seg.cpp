@@ -16,6 +16,6 @@ void Display7Seg::Begin()
 void Display7Seg::SetLevel(int level) 
 {
   LightDevice::SetLevel(level);
-  DEBUG_PRINT("Display7Seg::SetLevel");
+  // DEBUG_PRINT("Display7Seg::SetLevel");
   SevenSegmentTM1637::setBacklight(level);
 }

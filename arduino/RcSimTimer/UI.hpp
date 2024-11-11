@@ -3,6 +3,7 @@
 
 #include <Arduino.h> 
 #include <ArduinoQueue.h>
+#include "EEPROM.h"
 #include "Display7Seg.hpp"
 #include "LedPushButton.hpp"
 #include "Simulator.hpp"
@@ -14,12 +15,12 @@ class UI : public UiEvent {
     const char m_versionString[5] = "v085";
 
     enum UiState {
-      SimulatorSelect=0,
-      TimeSelect=1,
-      SimArmed=2,
-      SimRunning=3,
-      SimEnding=4,
-      SimReArming=5,
+      SimulatorSelect,
+      TimeSelect,
+      SimArmed,
+      SimRunning,
+      SimEnding,
+      SimReArming,
     };  
 
     enum UiAircraft {
@@ -42,10 +43,19 @@ class UI : public UiEvent {
       simApp_last,
     };
 
+    struct UiSettings {
+        unsigned char version=1;
+        unsigned char structSize=5;
+        unsigned char simDurationSelection;
+        unsigned char simAppSelection;
+        unsigned char chkSum;
+    };
+
     UiState                   m_state;
     UiAircraft                m_aircraftSelection;
-    UiSimDuration             m_simDurationSelection;
-    UiSimApp                  m_simAppSelection;
+    // UiSimDuration             m_simDurationSelection;
+    // UiSimApp                  m_simAppSelection;
+    UiSettings                m_settings;
     const char                m_simDurationSelectionString[simDuration_last][5] = {"0200", "0500", "1000"};
 #ifdef DEBUG
     const unsigned long       m_simDuration_ms[simDuration_last] = { 10000,  30000,  60000};
@@ -80,6 +90,10 @@ class UI : public UiEvent {
     void CountDownService();
     void SelectSimAircraft();
     void EventService();
+    bool LoadSettings();
+    void SaveSettings();
+    void InitSettings();
+    void CalcSettingsChkSum();
 
   public:
 
