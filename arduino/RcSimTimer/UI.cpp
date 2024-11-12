@@ -89,7 +89,7 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton)
   DEBUG_PRINT(m_settings.simDurationSelection);
 
   m_aircraftSelection     = 0;  // Some simulators use toggling, so this has to start at zero always
-  m_simAppSelection_apps[SimApp_Phoenix] = new SimulatorPhoenix;
+  m_simAppSelection_apps[SimApp_Phoenix4] = new SimulatorPhoenix;
   m_simAppSelection_apps[SimApp_RealFlight9] = new SimulatorRealFlight9;
   m_simAppSelection_apps[SimApp_RealFlightBasic] = new SimulatorRealFlightBasic;
   m_simulator = m_simAppSelection_apps[m_settings.simAppSelection];

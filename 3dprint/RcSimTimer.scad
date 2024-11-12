@@ -14,7 +14,6 @@ usbDepth            = 17;
 usbFrontOffset      = 0;
 
 
-
 displayWidth        = 51;
 displayHeight       = 20;
 displayDepth        = 8;
@@ -23,7 +22,7 @@ displayBaseWidth    = 72;
 displayBaseHeight   = 28;
 displayBaseDepth    = 9;
 
-displayFrontOffset  = 0;
+displayFrontOffset  = frameFrontThickness;
 
 
 buttonDiameterTop   = 20;
@@ -63,16 +62,14 @@ module Layer01a_UsbMountThingy()
 
 module Layer01b_UsbMountThingies()
 {
-    color("cyan") {    
-        translate([(-usbBaseWidth/2+usbThingyWidth/2),0,0]) Layer01a_UsbMountThingy();
-        translate([-(-usbBaseWidth/2+usbThingyWidth/2),0,0]) Layer01a_UsbMountThingy();
-    }    
+    translate([(-usbBaseWidth/2+usbThingyWidth/2),0,0]) Layer01a_UsbMountThingy();
+    translate([-(-usbBaseWidth/2+usbThingyWidth/2),0,0]) Layer01a_UsbMountThingy();
 }
 
 
 module Layer01_UsbCutout()
 {
-    color("red") {    
+    color("green") {    
     
         // Frame cutout
         translate([0,0,+usbDepth/2-0.01]) cube([usbWidth+2, usbHeight+2, usbDepth], center=true);
@@ -91,8 +88,8 @@ module Layer01_UsbCutout()
 module Layer02_DisplayCutout()
 {
     color("red") {
-        // Frame cutout
-        translate([0,0,+displayDepth/2-0.01]) cube([displayWidth-2, displayHeight-2, displayDepth], center=true);
+//        // Frame cutout
+//        translate([0,0,+displayDepth/2-0.01]) cube([displayWidth-2, displayHeight-2, displayDepth], center=true);
         
         // Actual display
         translate([0,0,-displayDepth/2]) cube([displayWidth, displayHeight, displayDepth], center=true);
@@ -104,7 +101,7 @@ module Layer02_DisplayCutout()
 
 module Layer03_PushbuttonCutout()
 {
-    color("red") {    
+    color("blue") {    
         // Actual button
         translate([0,0,+buttonDepth/2]) cylinder(h=buttonDepth, d1=buttonDiameterBottom, d2=buttonDiameterTop, center=true);
 
@@ -120,7 +117,7 @@ module Layer03_PushbuttonCutout()
 module Layer09_FullUiCutout()
 {
     translate([+displayBaseWidth-5,0,buttonFrontOffset+0.01]) Layer03_PushbuttonCutout();
-    translate([0,0,displayFrontOffset]) Layer02_DisplayCutout();
+    translate([0,0,displayFrontOffset+0.01]) Layer02_DisplayCutout();
     translate([-displayBaseWidth+5,0,usbFrontOffset]) Layer01_UsbCutout();    
 }
 
@@ -144,6 +141,12 @@ module Layer19_FinalFrame()
 }
 
 //Layer19_FinalFrame();
-rotate([180,0,0]) Layer19_FinalFrame();
+//rotate([180,0,0]) Layer19_FinalFrame();
    
 //translate([-displayBaseWidth,0,usbFrontOffset]) Layer01b_UsbMountThingies();
+
+
+// Experimental to test PLA over display translucent properties
+scaleFactor = (displayWidth-1)/displayWidth;
+translate([-displayWidth,0,0.1]) scale([scaleFactor,scaleFactor,scaleFactor]) cube([displayWidth, displayHeight, 0.2], center=true);
+translate([+displayWidth,0,0.2]) scale([scaleFactor,scaleFactor,scaleFactor]) cube([displayWidth, displayHeight, 0.4], center=true);

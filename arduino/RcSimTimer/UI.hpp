@@ -37,7 +37,7 @@ class UI : public UiEvent {
     };
 
     enum UiSimApp {
-      SimApp_Phoenix,
+      SimApp_Phoenix4,
       SimApp_RealFlight9,
       SimApp_RealFlightBasic,
       simApp_last,
@@ -67,7 +67,7 @@ class UI : public UiEvent {
     bool                      m_countingDown;
     Simulator                 *m_simulator;
     Simulator                 *m_simAppSelection_apps[simApp_last];
-    const char                m_simAppSelectionString[simApp_last][5] = {"PHOE", "rf_9", "rf_b"};
+    const char                m_simAppSelectionString[simApp_last][5] = {"PH_4", "rf_9", "rf_b"};
 
 // CountDown control data
     unsigned long m_timeEndPeriod_ms;                   // Period from start (after armed) to end when sim is paused - controlled in runtime
