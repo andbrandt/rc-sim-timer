@@ -14,22 +14,86 @@ UI::UI()
   m_eventQueue = new ArduinoQueue<UI::UiEventsInternal>(10);
 }
 
+// Return false if version or checksum does not match expected values
+bool
+UI::LoadSettings()
+{
+  DEBUG_PRINT("LoadSettings");
+
+  // Pre-initialise version and size fields before trying to read from eeprom
+  InitSettings();
+
+  if (m_settings.version != EEPROM.read(0)) return false;
+  if (m_settings.structSize != EEPROM.read(1)) return false;
+
+  // Now we know that version and size looks OK
+  DEBUG_PRINT("version and size looks OK");
+  m_settings.simDurationSelection = EEPROM.read(2);
+  m_settings.simAppSelection = EEPROM.read(3);
+
+  // Calculate expected checksum
+  CalcSettingsChkSum();
+  if (m_settings.chkSum != EEPROM.read(4)) return false;
+  DEBUG_PRINT("chkSum is OK");
+
+  return true;
+}
+
+void
+UI::SaveSettings()
+{
+  DEBUG_PRINT("SaveSettings");
+  EEPROM.write(0, m_settings.version);
+  EEPROM.write(1, m_settings.structSize);
+  EEPROM.write(2, m_settings.simDurationSelection);
+  EEPROM.write(3, m_settings.simAppSelection);
+  CalcSettingsChkSum();
+  EEPROM.write(4, m_settings.chkSum);
+}
+
+void
+UI::CalcSettingsChkSum()
+{
+  m_settings.chkSum = m_settings.version +
+                      m_settings.structSize +
+                      m_settings.simDurationSelection +
+                      m_settings.simAppSelection;
+}
+
+void
+UI::InitSettings()
+{
+  m_settings.version              = 1;
+  m_settings.structSize           = sizeof(m_settings);
+  m_settings.simDurationSelection = 0;
+  m_settings.simAppSelection      = 0;
+  CalcSettingsChkSum();
+}
+
+
 void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) 
 {
   m_display7Seg   = display7Seg;
   m_ledPushButton = ledPushButton;
 
-  m_aircraftSelection     = 0;
-  m_simDurationSelection  = 0;
-  m_simAppSelection       = 0;
-  m_simAppSelection_apps[SimApp_Phoenix] = new SimulatorPhoenix;
-  m_simAppSelection_apps[SimApp_RealFlight9] = new SimulatorRealFlight9;
-  m_simAppSelection_apps[SimApp_RealFlightBasic] = new SimulatorRealFlightBasic;
-  m_simulator = m_simAppSelection_apps[m_simAppSelection];
-
   m_display7Seg->setColonOn(true);
   m_display7Seg->print(m_versionString);
   delay(3000);
+
+  if (!LoadSettings()) {
+    InitSettings();
+  }
+
+  DEBUG_PRINT("Settings");
+  DEBUG_PRINT(m_settings.simAppSelection);
+  DEBUG_PRINT(m_settings.simDurationSelection);
+
+  m_aircraftSelection     = 0;  // Some simulators use toggling, so this has to start at zero always
+  m_simAppSelection_apps[SimApp_Phoenix] = new SimulatorPhoenix;
+  m_simAppSelection_apps[SimApp_RealFlight9] = new SimulatorRealFlight9;
+  m_simAppSelection_apps[SimApp_RealFlightBasic] = new SimulatorRealFlightBasic;
+  m_simulator = m_simAppSelection_apps[m_settings.simAppSelection];
+
   EventPush(Reset);
 }
 
@@ -49,14 +113,14 @@ void UI::StateSet(UiState state)
       m_display7Seg->setColonOn(false);
       m_display7Seg->Blink(true, 800, 200);
       m_ledPushButton->Off();
-      m_display7Seg->print(m_simAppSelectionString[m_simAppSelection]);
+      m_display7Seg->print(m_simAppSelectionString[m_settings.simAppSelection]);
       break;
 
     case TimeSelect:
       m_display7Seg->setColonOn(true);
       m_display7Seg->Blink(true, 800, 200);
       m_ledPushButton->Off();
-      m_display7Seg->print(m_simDurationSelectionString[m_simDurationSelection]);
+      m_display7Seg->print(m_simDurationSelectionString[m_settings.simDurationSelection]);
       break;
 
     case SimArmed:
@@ -116,6 +180,7 @@ void UI::EventService() {
       DEBUG_PRINT(m_state);
       switch(m_state) {
         case TimeSelect:
+          SaveSettings();
           StateSet(SimArmed);
           break;
 
@@ -133,22 +198,19 @@ void UI::EventService() {
     case Enter:
       switch(m_state) {
         case SimulatorSelect:
+          if (++m_settings.simAppSelection == simApp_last) m_settings.simAppSelection = 0;
+          m_simulator = m_simAppSelection_apps[m_settings.simAppSelection];
           StateSet(m_state);
-          m_simAppSelection = m_simAppSelection+1;
-          if (m_simAppSelection == simApp_last) m_simAppSelection = 0;
-          m_simulator = m_simAppSelection_apps[m_simAppSelection];
           break;
 
         case TimeSelect:
-          StateSet(m_state);
-          m_simDurationSelection = m_simDurationSelection+1;
-          if (m_simDurationSelection == simDuration_last) m_simDurationSelection = 0;
+          if (++m_settings.simDurationSelection == simDuration_last) m_settings.simDurationSelection = 0;
           StateSet(m_state);
           break;
 
         case SimArmed:
           StateSet(SimRunning);
-          StartCountDown(m_simDuration_ms[m_simDurationSelection]+1000);  // Also include time = 0 for best user experience
+          StartCountDown(m_simDuration_ms[m_settings.simDurationSelection]+1000);  // Also include time = 0 for best user experience
           m_simulator->Restart();
           break;
         
