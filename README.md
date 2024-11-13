@@ -20,19 +20,21 @@ Currently supported simulators:
 # Simulator preparation
 Depending on your simulator, you may have to do a litte setup to make it work with rc-sim-timer.
 ## Phoenix v4
-<img src="7segmentSimAppNamePhoenix_4.png" alt="Alt Text" width="100">
+<img src="readme/7segmentSimAppNamePhoenix_4.png" alt="Alt Text" width="100">
 
 Define two airplane favorites in the aircraft setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second and aerobatic model like extra 232.
 
+<img src="readme/SimFavoritesPhoenix4.png" alt="Alt Text" width="150">
+
 rc-sim-timer will choose an airplane from this list when you toggle between models using double press.
 ## RealFlight Basic
-<img src="7segmentSimAppNameRealFlight_Basic.png" alt="Alt Text" width="100">
+<img src="readme/7segmentSimAppNameRealFlight_Basic.png" alt="Alt Text" width="100">
 
 When you start the simulator, make sure to select the (???? - three lines down from "Krill Extra") airplane model.
 
 rc-sim-timer will jump up and down between "?????" and "Krill Extra" when you toggle between models using double press.
 ## RealFlight v9
-<img src="7segmentSimAppNameRealFlight_9.png" alt="Alt Text" width="100">
+<img src="readme/7segmentSimAppNameRealFlight_9.png" alt="Alt Text" width="100">
 
 Define two airplane favorites in the "edited airplanes" section of the airplane setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second and aerobatic model like extra 232.
 
