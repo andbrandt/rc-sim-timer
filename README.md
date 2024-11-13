@@ -22,7 +22,7 @@ Depending on your simulator, you may have to do a litte setup to make it work wi
 ## Phoenix v4
 <img src="readme/7segmentSimAppNamePhoenix_4.png" alt="Alt Text" width="100">
 
-Define two airplane favorites in the aircraft setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second and aerobatic model like extra 232.
+Define two airplane favorites in the aircraft setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second be an aerobatic model.
 
 <img src="readme/SimFavoritesPhoenix4.png" alt="Alt Text" width="150">
 
