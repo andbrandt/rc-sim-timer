@@ -1,0 +1,3 @@
+[submodule "anduinolib"]
+	path = anduinolib
+	url = https://github.com/andbrandt/anduinolib
