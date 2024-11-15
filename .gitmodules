@@ -1,3 +1,0 @@
-[submodule "arduino/anduinolib"]
-	path = arduino/anduinolib
-	url = https://github.com/andbrandt/anduinolib

@@ -13,7 +13,9 @@
 #include "LedPushButton.hpp"
 #include "UiEvent.hpp"
 #include "UI.hpp"
-#include "Time.hpp"
+#include "src/anduinolib/io/usb-hid/KeyboardCtl.hpp"
+#include "src/anduinolib/io/usb-hid/MouseCtl.hpp"
+#include "src/anduinolib/sys/Time.hpp"
 
 Display7Seg   display7Seg(DISPLAY_7SEG_PIN_CLK, 
                           DISPLAY_7SEG_PIN_SDA, 
@@ -30,8 +32,13 @@ LedPushButton ledPushButton(PUSHBUTTON_PIN_LED,
                           PUSHBUTTON_PIN_SWITCH);
 UI            ui;
 
+using namespace anduinolib::sys;
+using namespace anduinolib::io::usbHid;
+
 void setup() 
 {
+  mouseCtl.Begin();
+
   DEBUG_SETUP();
   time.Begin();
 

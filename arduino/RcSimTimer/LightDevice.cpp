@@ -2,8 +2,10 @@
 
 #include "LightDevice.hpp"
 #include "HAL.hpp"
-#include "Time.hpp"
+#include "src/anduinolib/sys/Time.hpp"
 // Time time;
+
+using namespace anduinolib::sys;
 
 LightDevice::LightDevice(int levelOff, int levelOn)
 {
