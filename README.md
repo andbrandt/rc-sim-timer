@@ -2,6 +2,16 @@ rc-sim-timer
 ===
 Project to manage RC Flight Simulators via an Arduino-based control panel.
 
+    Note: This project uses git submodules.
+
+    To clone this project use these commands:
+
+    * git clone https://github.com/andbrandt/rc-sim-timer
+    * cd rc-sim-timer
+    * git submodule init
+    * git submodule update
+
+
 Currently supported simulators:
 
 * Phoenix v4
