@@ -36,7 +36,7 @@ rc-sim-timer will jump up and down between "?????" and "Krill Extra" when you to
 ## RealFlight v9
 <img src="readme/7segmentSimAppNameRealFlight_9.png" alt="Alt Text" width="100">
 
-Define two airplane favorites in the "edited airplanes" section of the airplane setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second and aerobatic model like extra 232.
+Define two airplane favorites in the "edited airplanes" section of the airplane setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second be an aerobatic model.
 
 rc-sim-timer will choose an aircraft from this list when you toggle between models using double press.
 
