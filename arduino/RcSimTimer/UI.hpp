@@ -4,11 +4,15 @@
 #include <Arduino.h> 
 #include <ArduinoQueue.h>
 #include "EEPROM.h"
-#include "Display7Seg.hpp"
-#include "LedPushButton.hpp"
-#include "Simulator.hpp"
+#include "src/anduinolib/ui/Display7Seg.hpp"
+#include "src/anduinolib/ui/LedPushButton.hpp"
+#include "src/anduinolib/rc/sim/SimulatorBase.hpp"
 #include "UiEvent.hpp"
-#include "Debug.hpp"
+#include "src/anduinolib/debug/Debug.hpp"
+
+using namespace anduinolib::rc::sim;
+using namespace anduinolib::ui;
+
 
 class UI : public UiEvent {
   private:
@@ -53,8 +57,6 @@ class UI : public UiEvent {
 
     UiState                   m_state;
     UiAircraft                m_aircraftSelection;
-    // UiSimDuration             m_simDurationSelection;
-    // UiSimApp                  m_simAppSelection;
     UiSettings                m_settings;
     const char                m_simDurationSelectionString[simDuration_last][5] = {"0200", "0500", "1000"};
 #ifdef DEBUG
@@ -65,8 +67,8 @@ class UI : public UiEvent {
     Display7Seg               *m_display7Seg;
     LedPushButton             *m_ledPushButton;
     bool                      m_countingDown;
-    Simulator                 *m_simulator;
-    Simulator                 *m_simAppSelection_apps[simApp_last];
+    SimulatorBase             *m_simulator;
+    SimulatorBase             *m_simAppSelection_apps[simApp_last];
     const char                m_simAppSelectionString[simApp_last][5] = {"PH_4", "rf_9", "rf_b"};
 
 // CountDown control data
