@@ -1,12 +1,11 @@
 #include "Arduino.h"
 
-#include "UI.hpp"
 #include "src/anduinolib/sys/Time.hpp"
-
-#include "Simulator.hpp"
-#include "SimulatorPhoenix.hpp"
-#include "SimulatorRealFlight9.hpp".hpp"
-#include "SimulatorRealFlightBasic.hpp".hpp"
+#include "src/anduinolib/rc/sim/SimulatorBase.hpp"
+#include "src/anduinolib/rc/sim/SimPhoenix.hpp"
+#include "src/anduinolib/rc/sim/SimRealFlight9.hpp"
+#include "src/anduinolib/rc/sim/SimRealFlightBasic.hpp"
+#include "UI.hpp"
 
 using namespace anduinolib::sys;
 
@@ -79,6 +78,7 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton)
   m_ledPushButton = ledPushButton;
 
   m_display7Seg->setColonOn(true);
+  m_display7Seg->On();
   m_display7Seg->print(m_versionString);
   delay(3000);
 

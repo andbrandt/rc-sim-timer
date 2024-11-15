@@ -1,21 +1,24 @@
-/*
-  RC Sim Timer
-*/
+// #define DEBUG 1
+#include "src/anduinolib/debug/Debug.hpp"
 
-#include <Mouse.h>
-#include <Keyboard.h>
 #include <Arduino.h>
+// #include <Mouse.h>
+// #include <Keyboard.h>
 
-#include "Debug.hpp"
-#include "hal.hpp"
-#include "Display7Seg.hpp"
-#include "LED.hpp"
-#include "LedPushButton.hpp"
-#include "UiEvent.hpp"
-#include "UI.hpp"
+#include "src/anduinolib/ui/Display7Seg.hpp"
+#include "src/anduinolib/ui/LED.hpp"
+#include "src/anduinolib/ui/LedPushButton.hpp"
 #include "src/anduinolib/io/usb-hid/KeyboardCtl.hpp"
 #include "src/anduinolib/io/usb-hid/MouseCtl.hpp"
 #include "src/anduinolib/sys/Time.hpp"
+
+#include "hal.hpp"
+#include "UiEvent.hpp"
+#include "UI.hpp"
+
+using namespace anduinolib::sys;
+using namespace anduinolib::io::usbHid;
+using namespace anduinolib::ui;
 
 Display7Seg   display7Seg(DISPLAY_7SEG_PIN_CLK, 
                           DISPLAY_7SEG_PIN_SDA, 
@@ -31,9 +34,6 @@ LedPushButton ledPushButton(PUSHBUTTON_PIN_LED,
                           PUSHBUTTON_LED_LEVEL_ON, 
                           PUSHBUTTON_PIN_SWITCH);
 UI            ui;
-
-using namespace anduinolib::sys;
-using namespace anduinolib::io::usbHid;
 
 void setup() 
 {

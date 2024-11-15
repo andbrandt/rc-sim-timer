@@ -1,7 +1,7 @@
 #ifndef HAL_h
 #define HAL_h
 
-#include "debug.hpp"
+#include "src/anduinolib/debug/Debug.hpp"
 
 // Defines for PCB
 #define ONBOARD_LED_PIN 17
