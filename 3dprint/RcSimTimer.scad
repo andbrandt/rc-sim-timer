@@ -71,7 +71,7 @@ Layer01a_UsbMountThingy();
 module Layer01c_UsbMountThingiesFitSelection() 
 {
     for(count = [3,4,5,6,7]) {
-        translate([UsbMountThingyWidth*(count-4)*2.5,0,usbFrontOffset])scale([1,0.5,1])Layer01b_UsbMountThingies(0, (UsbMountThingyHeight-count*0.1)/UsbMountThingyHeight);
+        translate([UsbMountThingyWidth*(count-4)*2.5,0,usbFrontOffset])Layer01b_UsbMountThingies(0, (UsbMountThingyHeight-count*0.1)/UsbMountThingyHeight);
     }
 }
 
@@ -182,6 +182,6 @@ module Layer20_BackCover()
     }
 }
 
-//Layer19_FinalFrame();
+Layer19_FinalFrame();
 //Layer20_BackCover();
-Layer01c_UsbMountThingiesFitSelection();
+//Layer01c_UsbMountThingiesFitSelection();
