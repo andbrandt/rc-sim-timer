@@ -24,8 +24,7 @@ displayBaseWidth    = 72;
 displayBaseHeight   = 28;
 displayBaseDepth    = usbBaseDepth;
 
-//displayFrontOffset  = frameFrontThickness;
-displayFrontOffset  = 0.4;
+displayFrontOffset  = frameFrontThickness-0.4;
 
 
 buttonDiameterTop   = 20;
@@ -165,7 +164,7 @@ module Layer19_FinalFrame()
         translate([0,0,-UsbMountThingyWidth*1.0])Layer11_BackCoverStripHoleCutout(0);
         color("chocolate")         translate([+frameBaseWidth*0.5,frameBaseHeight*0.37,-UsbMountThingyWidth/2-3]) Layer12_BackCoverCableHoleCutout(12,frameBaseWidth/5);
 
-    color("aqua")         translate([+frameBaseWidth*0.25,frameBaseHeight*0.315,-UsbMountThingyWidth*2.5]) Layer12_BackCoverCableHoleCutout(7,frameBaseWidth/5);
+    color("aqua")         translate([+frameBaseWidth*0.25,0,-UsbMountThingyWidth*2.5]) Layer12_BackCoverCableHoleCutout(7,frameBaseWidth/5);
 
     color("lime")         translate([-frameBaseWidth*0.25,frameBaseHeight*0.07,-UsbMountThingyWidth*2.5]) Layer12_BackCoverCableHoleCutout(7,frameBaseWidth/5);
     }
