@@ -1,4 +1,4 @@
-$fn=5;
+$fn=25;
 
 axisX = 1;
 axisY = 2;
@@ -17,7 +17,7 @@ boxOuterHeight          = 80;   // z
 
 materialThickness       = 6;    // Thickness of the board
 fingerDepth             = materialThickness;    // Must always match
-fingerTargetWidth       = 12;   // Actual width Must be calculated to match the actual edge length; Never to be less than this number
+fingerTargetWidth       = fingerDepth*2;   // Actual width Must be calculated to match the actual edge length; Never to be less than this number
 fingerCutCompensation   = -0.5;    // Makes cutting tool remove a little less (or add if negative) from all edges
 
 airHoleDiameter         = 6;
@@ -43,11 +43,6 @@ module Layer01_BoxSolid()
     translate([0,boxOuterDepth/2,boxOuterHeight/2]) cube([boxOuterWidth,boxOuterDepth,boxOuterHeight], center=true);
 }
 
-//module Layer02_BoxCutout()
-//{    
-//    translate([0,boxInnerDepth/2+materialThickness+0.01,boxInnerHeight/2+materialThickness]) cube([boxInnerWidth,boxInnerDepth,boxInnerHeight], center=true);
-//}
-
 module Layer03_BoxCutoutTimerFrame()
 {        
     translate([0,boxOuterDepth/2,boxOuterHeight/2]) cube([timerFrameWidth,boxOuterDepth+0.01,timerFrameHeight], center=true);
@@ -67,11 +62,10 @@ holeStepRangeZ = abs((boxOuterHeight - airHoleSpacing*2)/(airHoleSpacing*2))*2;
     }
 }
 
-module Layer09_BoxComplete()
+module Layer09_BoxWithCutouts()
 {
     difference() {
         Layer01_BoxSolid();
-//        Layer02_BoxCutout();
         Layer03_BoxCutoutTimerFrame();
         Layer04_BoxCutoutAirHoles();
     }
@@ -82,7 +76,7 @@ module Layer09_BoxComplete()
 module Layer11_SideLeft()
 {    
     intersection() {
-        Layer09_BoxComplete();
+        Layer09_BoxWithCutouts();
         translate([-sideOffsetLeft,0,0]) cube([materialThickness,boxOuterDepth*2,boxOuterHeight*2], center=true);
     }
 }
@@ -90,7 +84,7 @@ module Layer11_SideLeft()
 module Layer12_SideRight()
 {    
     intersection() {
-        Layer09_BoxComplete();
+        Layer09_BoxWithCutouts();
         translate([+sideOffsetLeft,0,0]) cube([materialThickness,boxOuterDepth*2,boxOuterHeight*2], center=true);
     }
 }
@@ -98,7 +92,7 @@ module Layer12_SideRight()
 module Layer13_SideTop()
 {    
     intersection() {
-        Layer09_BoxComplete();
+        Layer09_BoxWithCutouts();
         translate([0,0,sideOffsetTop]) cube([boxOuterWidth*2,boxOuterDepth*2,materialThickness], center=true);
     }
 }
@@ -106,7 +100,7 @@ module Layer13_SideTop()
 module Layer14_SideBottom()
 {    
     intersection() {
-        Layer09_BoxComplete();
+        Layer09_BoxWithCutouts();
         translate([0,0,sideOffsetBottom]) cube([boxOuterWidth*2,boxOuterDepth*2,materialThickness], center=true);
     }
 }
@@ -115,7 +109,7 @@ module Layer15_SideFront()
 {    
     difference() {
         intersection() {
-            Layer09_BoxComplete();
+            Layer09_BoxWithCutouts();
             translate([0,sideOffsetFront,0]) cube([boxOuterWidth*2,materialThickness,boxOuterHeight*2], center=true);
         }
         
@@ -138,19 +132,46 @@ function fingerWidth(edgeLength) = edgeLength/fingerNumber(edgeLength);
 
 module FingerMarkers(axis, edgeLength, innerOuterFinger)
 {
-    for (finger = [innerOuterFinger:2:fingerNumber(edgeLength)-1])
-    {
-        translate([(finger+0.5)*fingerWidth(edgeLength),0,0]) cube([fingerWidth(edgeLength)-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01], center=true);
+    rotate(axis == axisZ ? [0,-90,0] : (axis == axisY ? [0,0,90] : [0,0,0])) {
+        for (finger = [innerOuterFinger:2:fingerNumber(edgeLength)-1])
+        {
+            translate([(finger+0.5)*fingerWidth(edgeLength),0,0]) cube([fingerWidth(edgeLength)-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01], center=true);
+        }
     }
+}
 
+module Layer21_SideLeftWithFingers()
+{
+    difference() {
+        Layer11_SideLeft();
+
+        // Front edge
+        translate([(-boxOuterWidth+fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, innerFinger);
+
+        // Side edges
+        for (zPos=[+fingerDepth/2, boxOuterHeight-fingerDepth/2]) {
+            translate([(-boxOuterWidth+fingerDepth)/2,fingerDepth-fingerCutCompensation,zPos]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, outerFinger);
+        }
+    }
+}
+
+module Layer22_SideRightWithFingers()
+{
+     translate([boxOuterWidth-materialThickness,0,0]) Layer21_SideLeftWithFingers();    
 }
 
 module Layer23_SideTopWithFingers()
 {        
     difference() {
         Layer13_SideTop();
+
         // Front edges
         translate([-boxOuterWidth/2,sideOffsetFront,boxOuterHeight-materialThickness/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
+
+        // Side edges
+        for (edgeFactor=[-1:2:+1]) {
+            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth-fingerCutCompensation,boxOuterHeight-fingerDepth/2]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+        }
     }
 }
 
@@ -169,17 +190,18 @@ module Layer25_SideFrontWithFingers()
         translate([-boxOuterWidth/2,sideOffsetFront,boxOuterHeight-fingerDepth/2]) FingerMarkers(axisX, boxOuterWidth, outerFinger);
         
         // Left and Right edges
-        translate([-(boxOuterWidth-fingerDepth)/2,sideOffsetFront,0,]) rotate([0,-90,0]) FingerMarkers(axisX, boxOuterHeight, outerFinger);
-
-        translate([+(boxOuterWidth-fingerDepth)/2,sideOffsetFront,0,]) rotate([0,-90,0]) FingerMarkers(axisX, boxOuterHeight, outerFinger);        
+            for (edgeFactor=[-1:2:+1]) {
+            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, outerFinger);
+            }
     }
 }
 
 
-
-//Layer09_BoxComplete();
+//Layer09_BoxWithCutouts();
 //Layer19_AllSides();
 //Layer15_SideFront();
-color("GreenYellow") Layer23_SideTopWithFingers();
-color("GreenYellow") Layer24_SideBottomWithFingers();
-color("cyan") Layer25_SideFrontWithFingers();
+Layer23_SideTopWithFingers();
+Layer24_SideBottomWithFingers();
+Layer25_SideFrontWithFingers();
+Layer21_SideLeftWithFingers();
+Layer22_SideRightWithFingers();
