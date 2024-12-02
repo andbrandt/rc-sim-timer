@@ -1,6 +1,7 @@
 $fn=100;
 
 frameFrontThickness = 2;
+frameFrontOverlap   = 8;
 frameWallThickness  = 2;
 
 usbFrontWidth        = 31;
@@ -37,13 +38,24 @@ buttonBaseDepth     = usbBaseDepth;
 buttonFrontOffset   = frameFrontThickness;
 
 
-frameWidth          = displayWidth*2+usbBaseWidth*2+buttonDiameterBottom*2;
-frameHeight         = displayHeight*2;
+frameBaseWidth      = displayWidth*2+usbBaseWidth*2+buttonDiameterBottom*2-4;
+frameBaseHeight     = displayHeight*2-4;
+frameBaseDepth      = usbBaseDepth-frameFrontThickness-0.1;
+
+frameWidth          = frameBaseWidth+frameFrontOverlap;
+frameHeight         = frameBaseHeight+frameFrontOverlap;
 frameDepth          = frameFrontThickness;
+
+/*
 
 frameBaseWidth      = frameWidth-4;
 frameBaseHeight     = frameHeight-4;
 frameBaseDepth      = usbBaseDepth-frameFrontThickness-0.1;
+
+frameWidth          = displayWidth*2+usbBaseWidth*2+buttonDiameterBottom*2;
+frameHeight         = displayHeight*2;
+frameDepth          = frameFrontThickness;
+*/
 
 
 //usbThingyWidth = usbFrontHeight*0.6;
@@ -146,6 +158,18 @@ module Layer11_BackCoverStripHoleCutout(depth)
     }
 }
 
+module Layer11b_FrameStripHoleCutout()
+{
+angleSpan = 45;
+extrudeRadius = 100;
+    
+    for(xPos = [-displayBaseWidth-10, +displayBaseWidth+10]) {
+        translate([xPos/2,0,-UsbMountThingyWidth*1.5])
+        rotate([0,-90,0]) translate([-extrudeRadius, 0, 0]) scale([1,0.5,1]) rotate([0,0,-angleSpan/2]) rotate_extrude(angle=angleSpan, convexity=10)
+       translate([extrudeRadius, 0]) circle(d=UsbMountThingyWidth);
+    }
+}
+
 module Layer12_BackCoverCableHoleCutout(depth, length)
 {
     hull() {
@@ -161,7 +185,8 @@ module Layer19_FinalFrame()
     difference() {
         Layer10_FrameSolid(0);
         Layer09_FullUiCutout();
-        translate([0,0,-UsbMountThingyWidth*1.0])Layer11_BackCoverStripHoleCutout(0);
+//        translate([0,0,-UsbMountThingyWidth*1.0])Layer11_BackCoverStripHoleCutout(0);
+        translate([0,0,+1])Layer11b_FrameStripHoleCutout();
         color("chocolate")         translate([+frameBaseWidth*0.5,frameBaseHeight*0.37,-UsbMountThingyWidth/2-3]) Layer12_BackCoverCableHoleCutout(12,frameBaseWidth/5);
 
     color("aqua")         translate([+frameBaseWidth*0.25,0,-UsbMountThingyWidth*2.5]) Layer12_BackCoverCableHoleCutout(7,frameBaseWidth/5);
@@ -173,14 +198,17 @@ module Layer19_FinalFrame()
 module Layer20_BackCover()
 {
     difference() {
-        translate([0,0,-(frameBaseDepth+frameWallThickness)/2]) cube([frameBaseWidth+frameWallThickness*2, frameBaseHeight+frameWallThickness*2, frameBaseDepth+frameWallThickness], center=true);
-        translate([0,0,+0.01]) Layer10_FrameSolid(0.5);
+        translate([0,0,-(frameBaseDepth+frameWallThickness)/2]) cube([frameWidth, frameHeight, frameBaseDepth+frameWallThickness], center=true);
+        translate([0,0,+0.01]) Layer10_FrameSolid(1.0);
         translate([0,0,-UsbMountThingyWidth*0.6]) Layer11_BackCoverStripHoleCutout(8);
         color("chocolate")         translate([+frameBaseWidth*0.5,frameBaseHeight*0.37,-UsbMountThingyWidth/2+2+4]) Layer12_BackCoverCableHoleCutout(10,frameBaseWidth/5);
 
     }
 }
+//Layer11b_FrameStripHoleCutout();
 
-Layer19_FinalFrame();
-//Layer20_BackCover();
+//% translate([0,0,-UsbMountThingyWidth*1.0])Layer11_BackCoverStripHoleCutout(0);
+
+//Layer19_FinalFrame();
+Layer20_BackCover();
 //Layer01c_UsbMountThingiesFitSelection();
