@@ -28,10 +28,10 @@ airHoleSpacing          = 12;
 //boxInnerHeight          = boxOuterHeight - materialThickness*2;
 
 sideOffsetLeft          = (boxOuterWidth-materialThickness)/2;
-sideOffsetRight         = sideOffsetLeft;
-sideOffsetTop           = boxOuterHeight - materialThickness/2;
-sideOffsetBottom        = + materialThickness/2;
-sideOffsetFront         = + materialThickness/2;
+//sideOffsetRight         = sideOffsetLeft;
+sideOffsetTop           = (boxOuterHeight - materialThickness)/2;
+//sideOffsetBottom        = + materialThickness/2;
+sideOffsetFront         = (-boxOuterDepth + materialThickness)/2;
 
 timerFrameWidth         = 175;
 timerFrameHeight        = 37;
@@ -40,12 +40,14 @@ timerFrameHeight        = 37;
 
 module Layer01_BoxSolid()
 {    
-    translate([0,boxOuterDepth/2,boxOuterHeight/2]) cube([boxOuterWidth,boxOuterDepth,boxOuterHeight], center=true);
+//    translate([0,boxOuterDepth/2,boxOuterHeight/2])
+    cube([boxOuterWidth,boxOuterDepth,boxOuterHeight], center=true);
 }
 
 module Layer03_BoxCutoutTimerFrame()
 {        
-    translate([0,boxOuterDepth/2,boxOuterHeight/2]) cube([timerFrameWidth,boxOuterDepth+0.01,timerFrameHeight], center=true);
+//    translate([0,boxOuterDepth/2,boxOuterHeight/2]) 
+    cube([timerFrameWidth,boxOuterDepth+0.01,timerFrameHeight], center=true);
 }
 
 module Layer04_BoxCutoutAirHoles()
@@ -57,7 +59,8 @@ holeStepRangeZ = abs((boxOuterHeight - airHoleSpacing*2)/(airHoleSpacing*2))*2;
     {
         for (StepZ = [-holeStepRangeZ/2:holeStepRangeZ/2])
         {
-            translate([0,boxOuterDepth/2+StepY*airHoleSpacing,boxOuterHeight/2 + airHoleDiameter/2 + StepZ*airHoleSpacing]) rotate([0,90,0,]) cylinder(d=airHoleDiameter, h=boxOuterWidth+0.01, center=true);
+//            translate([0,boxOuterDepth/2+StepY*airHoleSpacing,boxOuterHeight/2 + airHoleDiameter/2 + StepZ*airHoleSpacing]) rotate([0,90,0,])             
+            translate([0,StepY*airHoleSpacing,airHoleDiameter/2 + StepZ*airHoleSpacing]) rotate([0,90,0,]) cylinder(d=airHoleDiameter, h=boxOuterWidth+0.01, center=true);
         }    
     }
 }
@@ -135,7 +138,7 @@ module FingerMarkers(axis, edgeLength, innerOuterFinger)
     rotate(axis == axisZ ? [0,-90,0] : (axis == axisY ? [0,0,90] : [0,0,0])) {
         for (finger = [innerOuterFinger:2:fingerNumber(edgeLength)-1])
         {
-            translate([(finger+0.5)*fingerWidth(edgeLength),0,0]) cube([fingerWidth(edgeLength)-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01], center=true);
+            translate([(finger+0.5)*fingerWidth(edgeLength)-edgeLength/2,0,0]) cube([fingerWidth(edgeLength)-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01], center=true);
         }
     }
 }
@@ -149,8 +152,8 @@ module Layer21_SideLeftWithFingers()
         translate([(-boxOuterWidth+fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, innerFinger);
 
         // Side edges
-        for (zPos=[+fingerDepth/2, boxOuterHeight-fingerDepth/2]) {
-            translate([(-boxOuterWidth+fingerDepth)/2,fingerDepth-fingerCutCompensation,zPos]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, outerFinger);
+        for (zPos=[-sideOffsetTop, +sideOffsetTop]) {
+            translate([(-boxOuterWidth+fingerDepth)/2,fingerDepth/2,zPos]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, outerFinger);
         }
     }
 }
@@ -165,12 +168,12 @@ module Layer23_SideTopWithFingers()
     difference() {
         Layer13_SideTop();
 
-        // Front edges
-        translate([-boxOuterWidth/2,sideOffsetFront,boxOuterHeight-materialThickness/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
+        // Front edge
+        translate([0,sideOffsetFront,(boxOuterHeight-materialThickness)/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
 
         // Side edges
         for (edgeFactor=[-1:2:+1]) {
-            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth-fingerCutCompensation,boxOuterHeight-fingerDepth/2]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2-fingerCutCompensation,(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
         }
     }
 }
@@ -184,18 +187,22 @@ module Layer25_SideFrontWithFingers()
 {        
     difference() {
         Layer15_SideFront();
+        
         // Bottom and Top edges
-        translate([-boxOuterWidth/2,sideOffsetFront,fingerDepth/2]) FingerMarkers(axisX, boxOuterWidth, outerFinger);
-
-        translate([-boxOuterWidth/2,sideOffsetFront,boxOuterHeight-fingerDepth/2]) FingerMarkers(axisX, boxOuterWidth, outerFinger);
+        for (edgeFactor=[-1,+1]) {
+            translate([0,sideOffsetFront,edgeFactor*(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisX, boxOuterWidth, 
+                outerFinger);
+        }        
         
         // Left and Right edges
-            for (edgeFactor=[-1:2:+1]) {
+        for (edgeFactor=[-1,+1]) {
             translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, outerFinger);
-            }
+        }
     }
 }
 
+
+//FingerMarkers(axisX, 200, innerFinger);
 
 //Layer09_BoxWithCutouts();
 //Layer19_AllSides();
