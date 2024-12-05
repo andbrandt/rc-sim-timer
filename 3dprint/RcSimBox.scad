@@ -1,5 +1,15 @@
 $fn=25;
 
+// Tricks to cut objects in LightBurn larger than physical laser bed:
+// 1: https://www.youtube.com/watch?v=n__saOKVupA
+// 2: https://www.youtube.com/watch?v=U259xw-fxOI
+//
+// Alternatives including making alignment holes and insert dowels after cutting first part
+
+// Tricks to make STL to PNG: (Alternative: Make SCAD Projection cut and export to DXF for another lightburn layer)
+// A: https://fenrus75.github.io/FenrusCNCtools/javascript/stl2png.html
+//
+
 axisX = 1;
 axisY = 2;
 axisZ = 3;
@@ -143,6 +153,11 @@ module FingerMarkers(axis, edgeLength, innerOuterFinger)
     }
 }
 
+module SideName(sideName) {
+    color("DimGray") translate([0, -boxOuterHeight/3, -boxOuterHeight/2])
+    linear_extrude(height = boxOuterHeight) text(sideName, font = "Liberation Mono", size = 10, valign = "center");
+}
+
 module Layer21_SideLeftWithFingers()
 {
     difference() {
@@ -173,7 +188,7 @@ module Layer23_SideTopWithFingers()
 
         // Side edges
         for (edgeFactor=[-1:2:+1]) {
-            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2-fingerCutCompensation,(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2,(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
         }
     }
 }
@@ -181,6 +196,8 @@ module Layer23_SideTopWithFingers()
 module Layer24_SideBottomWithFingers()
 {     
      translate([0,0,-(boxOuterHeight-materialThickness)]) Layer23_SideTopWithFingers();
+    
+    SideName("Bottom");
 }
 
 module Layer25_SideFrontWithFingers()
@@ -201,14 +218,24 @@ module Layer25_SideFrontWithFingers()
     }
 }
 
+// ###############################################
 
-//FingerMarkers(axisX, 200, innerFinger);
+module Layer34_SideBottomFlattened()
+{     
+    difference() {
+        Layer24_SideBottomWithFingers();
+        SideName("Bottom");
+    }
+}
+
 
 //Layer09_BoxWithCutouts();
 //Layer19_AllSides();
-//Layer15_SideFront();
-Layer23_SideTopWithFingers();
-Layer24_SideBottomWithFingers();
-Layer25_SideFrontWithFingers();
-Layer21_SideLeftWithFingers();
-Layer22_SideRightWithFingers();
+
+//Layer23_SideTopWithFingers();
+//Layer24_SideBottomWithFingers();
+//Layer25_SideFrontWithFingers();
+//Layer21_SideLeftWithFingers();
+//Layer22_SideRightWithFingers();
+
+projection(cut = false) Layer34_SideBottomFlattened();
