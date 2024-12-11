@@ -205,10 +205,14 @@ module Layer20_BackCover()
 
     }
 }
-//Layer11b_FrameStripHoleCutout();
 
-//% translate([0,0,-UsbMountThingyWidth*1.0])Layer11_BackCoverStripHoleCutout(0);
+partToRender = "FrontPanel";
+echo(partToRender);
 
-//Layer19_FinalFrame();
-Layer20_BackCover();
-//Layer01c_UsbMountThingiesFitSelection();
+if (partToRender == "FrontPanel")
+    Layer19_FinalFrame();
+if (partToRender == "BackCover")
+    Layer20_BackCover();
+if (partToRender == "UsbSpikes")
+    Layer01c_UsbMountThingiesFitSelection();
+//endif)

@@ -1,4 +1,4 @@
-$fn=25;
+$fn=5;
 
 // Tricks to cut objects in LightBurn larger than physical laser bed:
 // 1: https://www.youtube.com/watch?v=n__saOKVupA
@@ -21,14 +21,20 @@ outerFinger = 1;
 // Outer box bottom resides on z=0 plane
 // Outer box front is aligned to x axis (y=0) and symmetrical to y axis
 
-boxOuterWidth           = 430;  // x
-boxOuterDepth           = 300;  // y
-boxOuterHeight          = 80;   // z
+//boxOuterWidth           = 430;  // x
+//boxOuterDepth           = 300;  // y
+//boxOuterHeight          = 80;   // z
+//labelFontSize           = 8;
 
-materialThickness       = 6;    // Thickness of the board
+boxOuterWidth           = 80;  // x
+boxOuterDepth           = 60;  // y
+boxOuterHeight          = 30;   // z
+labelFontSize           = 5.5;
+
+materialThickness       = 3;    // Thickness of the board
 fingerDepth             = materialThickness;    // Must always match
 fingerTargetWidth       = fingerDepth*2;   // Actual width Must be calculated to match the actual edge length; Never to be less than this number
-fingerCutCompensation   = -0.5;    // Makes cutting tool remove a little less (or add if negative) from all edges
+fingerCutCompensation   = 0; // -0.5;    // Makes cutting tool remove a little less (or add if negative) from all edges
 
 airHoleDiameter         = 6;
 airHoleSpacing          = 12;
@@ -38,9 +44,9 @@ airHoleSpacing          = 12;
 //boxInnerHeight          = boxOuterHeight - materialThickness*2;
 
 sideOffsetLeft          = (boxOuterWidth-materialThickness)/2;
-//sideOffsetRight         = sideOffsetLeft;
+sideOffsetRight         = -sideOffsetLeft;
 sideOffsetTop           = (boxOuterHeight - materialThickness)/2;
-//sideOffsetBottom        = + materialThickness/2;
+sideOffsetBottom        = -sideOffsetTop;
 sideOffsetFront         = (-boxOuterDepth + materialThickness)/2;
 
 timerFrameWidth         = 175;
@@ -68,8 +74,7 @@ holeStepRangeZ = abs((boxOuterHeight - airHoleSpacing*2)/(airHoleSpacing*2))*2;
     for (StepY = [-holeStepRangeY/2:holeStepRangeY/2])
     {
         for (StepZ = [-holeStepRangeZ/2:holeStepRangeZ/2])
-        {
-//            translate([0,boxOuterDepth/2+StepY*airHoleSpacing,boxOuterHeight/2 + airHoleDiameter/2 + StepZ*airHoleSpacing]) rotate([0,90,0,])             
+        { 
             translate([0,StepY*airHoleSpacing,airHoleDiameter/2 + StepZ*airHoleSpacing]) rotate([0,90,0,]) cylinder(d=airHoleDiameter, h=boxOuterWidth+0.01, center=true);
         }    
     }
@@ -79,8 +84,8 @@ module Layer09_BoxWithCutouts()
 {
     difference() {
         Layer01_BoxSolid();
-        Layer03_BoxCutoutTimerFrame();
-        Layer04_BoxCutoutAirHoles();
+//        Layer03_BoxCutoutTimerFrame();
+//        Layer04_BoxCutoutAirHoles();
     }
 }
 
@@ -129,14 +134,14 @@ module Layer15_SideFront()
     }
 }
 
-module Layer19_AllSides()   // Just for testing. No need for finger cutting
-{    
-    Layer11_SideLeft();
-    Layer12_SideRight();
-    Layer13_SideTop();
-    Layer14_SideBottom();
-    Layer15_SideFront();
-}
+//module Layer19_AllSides()   // Just for testing. No need for finger cutting
+//{    
+//    Layer11_SideLeft();
+//    Layer12_SideRight();
+//    Layer13_SideTop();
+//    Layer14_SideBottom();
+//    Layer15_SideFront();
+//}
 
 // #################### FINGER MARKERS ###########################
 function fingerNumber(edgeLength) = 2*floor(edgeLength/(fingerTargetWidth*2))+1; // Must be an odd number!
@@ -151,11 +156,6 @@ module FingerMarkers(axis, edgeLength, innerOuterFinger)
             translate([(finger+0.5)*fingerWidth(edgeLength)-edgeLength/2,0,0]) cube([fingerWidth(edgeLength)-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01], center=true);
         }
     }
-}
-
-module SideName(sideName) {
-    color("DimGray") translate([0, -boxOuterHeight/3, -boxOuterHeight/2])
-    linear_extrude(height = boxOuterHeight) text(sideName, font = "Liberation Mono", size = 10, valign = "center");
 }
 
 module Layer21_SideLeftWithFingers()
@@ -196,8 +196,6 @@ module Layer23_SideTopWithFingers()
 module Layer24_SideBottomWithFingers()
 {     
      translate([0,0,-(boxOuterHeight-materialThickness)]) Layer23_SideTopWithFingers();
-    
-    SideName("Bottom");
 }
 
 module Layer25_SideFrontWithFingers()
@@ -219,23 +217,67 @@ module Layer25_SideFrontWithFingers()
 }
 
 // ###############################################
+module SideName(sideName) {
+    color("DimGray") translate([-16,0,-boxOuterWidth*0.75]) linear_extrude(height = boxOuterWidth) text(sideName, font = "Liberation Mono", size = labelFontSize, valign = "center");
+}
 
-module Layer34_SideBottomFlattened()
+module Layer31_SideLeftFlattened()
 {     
+    projection(cut = false)
     difference() {
-        Layer24_SideBottomWithFingers();
-        SideName("Bottom");
+        rotate([0,-90,0]) Layer21_SideLeftWithFingers();
+    translate([-5,-boxOuterDepth/2+14,0]) rotate([0,0,180]) SideName("Left");
     }
 }
 
+module Layer32_SideRightFlattened()
+{     
+    projection(cut = false)
+    difference() {
+        rotate([0,90,0]) Layer22_SideRightWithFingers();
+    translate([-5,-boxOuterDepth/2+14,0]) rotate([0,0,180]) SideName("Right");
+    }    
+}
 
-//Layer09_BoxWithCutouts();
-//Layer19_AllSides();
+module Layer33_SideTopFlattened()
+{     
+    projection(cut = false)
+    difference() {
+        rotate([0,180,0]) Layer23_SideTopWithFingers();
+    translate([-5,-boxOuterDepth/2+14,0]) rotate([0,0,180]) SideName("Top");
+    }    
+}
 
-//Layer23_SideTopWithFingers();
-//Layer24_SideBottomWithFingers();
-//Layer25_SideFrontWithFingers();
-//Layer21_SideLeftWithFingers();
-//Layer22_SideRightWithFingers();
+module Layer34_SideBottomFlattened()
+{     
+    projection(cut = false)
+    difference() {
+        Layer24_SideBottomWithFingers();
+    translate([-5,-boxOuterDepth/2+14,0]) rotate([0,0,180]) SideName("Bottom");
+    }    
+}
 
-projection(cut = false) Layer34_SideBottomFlattened();
+module Layer35_SideFrontFlattened()
+{     
+    projection(cut = false)
+    difference() {
+        rotate([90,0,0]) Layer25_SideFrontWithFingers();
+    translate([boxOuterWidth*0.25,-boxOuterHeight/2+14,0]) rotate([0,0,180]) SideName("Front");
+    }    
+}
+
+
+sideToFlatten = "Right";
+echo(sideToFlatten);
+
+if      (sideToFlatten=="Left")
+    Layer31_SideLeftFlattened();
+else if (sideToFlatten=="Right")
+    Layer32_SideRightFlattened();
+else if (sideToFlatten=="Top")
+    Layer33_SideTopFlattened();
+else if (sideToFlatten=="Bottom")
+    Layer34_SideBottomFlattened();
+else if (sideToFlatten=="Front")
+    Layer35_SideFrontFlattened();
+// endif
