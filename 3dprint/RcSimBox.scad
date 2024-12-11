@@ -266,8 +266,13 @@ module Layer35_SideFrontFlattened()
     }    
 }
 
+//Layer23_SideTopWithFingers();
+//Layer24_SideBottomWithFingers();
+//Layer25_SideFrontWithFingers();
+//Layer21_SideLeftWithFingers();
+//Layer22_SideRightWithFingers();
 
-sideToFlatten = "Right";
+sideToFlatten = "None";
 echo(sideToFlatten);
 
 if      (sideToFlatten=="Left")
