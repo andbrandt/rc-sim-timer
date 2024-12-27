@@ -1,4 +1,4 @@
-$fn=5;
+$fn=50;
 
 // Tricks to cut objects in LightBurn larger than physical laser bed:
 // 1: https://www.youtube.com/watch?v=n__saOKVupA
@@ -31,12 +31,12 @@ labelFontSize           = 8;
 //boxOuterHeight          = 30;   // z
 //labelFontSize           = 5.5;
 
-materialThickness       = 3;    // Thickness of the board
+materialThickness       = 6;    // Thickness of the board
 fingerDepth             = materialThickness;    // Must always match
 fingerTargetWidth       = fingerDepth*2;   // Actual width Must be calculated to match the actual edge length; Never to be less than this number
 fingerCutCompensation   = 0; // -0.5;    // Makes cutting tool remove a little less (or add if negative) from all edges
 
-airHoleDiameter         = 6;
+airHoleDiameter         = 8;
 airHoleSpacing          = 12;
 
 //boxInnerWidth           = boxOuterWidth - materialThickness*2;
@@ -68,14 +68,14 @@ module Layer03_BoxCutoutTimerFrame()
 
 module Layer04_BoxCutoutAirHoles()
 {        
-holeStepRangeY = abs((boxOuterDepth - airHoleSpacing*4)/(airHoleSpacing*2))*2;
-holeStepRangeZ = abs((boxOuterHeight - airHoleSpacing*2)/(airHoleSpacing*2))*2;
+holeStepRangeY = floor((boxOuterDepth - airHoleSpacing*4)/(airHoleSpacing*2))*2;
+holeStepRangeZ = floor((boxOuterHeight - airHoleSpacing*2)/(airHoleSpacing*2))*2;
 
     for (StepY = [-holeStepRangeY/2:holeStepRangeY/2])
     {
         for (StepZ = [-holeStepRangeZ/2:holeStepRangeZ/2])
         { 
-            translate([0,StepY*airHoleSpacing,airHoleDiameter/2 + StepZ*airHoleSpacing]) rotate([0,90,0,]) cylinder(d=airHoleDiameter, h=boxOuterWidth+0.01, center=true);
+            translate([0,StepY*airHoleSpacing,StepZ*airHoleSpacing]) rotate([0,90,0,]) cylinder(d=airHoleDiameter, h=boxOuterWidth+0.01, center=true);
         }    
     }
 }
