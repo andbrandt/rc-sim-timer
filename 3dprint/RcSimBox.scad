@@ -21,15 +21,15 @@ outerFinger = 1;
 // Outer box bottom resides on z=0 plane
 // Outer box front is aligned to x axis (y=0) and symmetrical to y axis
 
-//boxOuterWidth           = 430;  // x
-//boxOuterDepth           = 300;  // y
-//boxOuterHeight          = 80;   // z
-//labelFontSize           = 8;
+boxOuterWidth           = 430;  // x
+boxOuterDepth           = 310;  // y
+boxOuterHeight          = 50;   // z
+labelFontSize           = 8;
 
-boxOuterWidth           = 80;  // x
-boxOuterDepth           = 60;  // y
-boxOuterHeight          = 30;   // z
-labelFontSize           = 5.5;
+//boxOuterWidth           = 80;  // x
+//boxOuterDepth           = 60;  // y
+//boxOuterHeight          = 30;   // z
+//labelFontSize           = 5.5;
 
 materialThickness       = 3;    // Thickness of the board
 fingerDepth             = materialThickness;    // Must always match
@@ -84,8 +84,8 @@ module Layer09_BoxWithCutouts()
 {
     difference() {
         Layer01_BoxSolid();
-//        Layer03_BoxCutoutTimerFrame();
-//        Layer04_BoxCutoutAirHoles();
+        Layer03_BoxCutoutTimerFrame();
+        Layer04_BoxCutoutAirHoles();
     }
 }
 
@@ -266,16 +266,17 @@ module Layer35_SideFrontFlattened()
     }    
 }
 
-//Layer23_SideTopWithFingers();
-//Layer24_SideBottomWithFingers();
-//Layer25_SideFrontWithFingers();
-//Layer21_SideLeftWithFingers();
-//Layer22_SideRightWithFingers();
-
 sideToFlatten = "None";
 echo(sideToFlatten);
 
-if      (sideToFlatten=="Left")
+if      (sideToFlatten=="None") {
+    Layer23_SideTopWithFingers();
+    Layer24_SideBottomWithFingers();
+    Layer25_SideFrontWithFingers();
+    Layer21_SideLeftWithFingers();
+    Layer22_SideRightWithFingers();
+}
+else if      (sideToFlatten=="Left")
     Layer31_SideLeftFlattened();
 else if (sideToFlatten=="Right")
     Layer32_SideRightFlattened();
