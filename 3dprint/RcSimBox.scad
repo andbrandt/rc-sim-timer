@@ -1,4 +1,4 @@
-$fn=5;
+$fn=50;
 
 // Tricks to cut objects in LightBurn larger than physical laser bed:
 // 1: https://www.youtube.com/watch?v=n__saOKVupA
@@ -21,27 +21,23 @@ outerFinger = 1;
 // Outer box bottom resides on z=0 plane
 // Outer box front is aligned to x axis (y=0) and symmetrical to y axis
 
-//boxOuterWidth           = 430;  // x
-//boxOuterDepth           = 300;  // y
-//boxOuterHeight          = 80;   // z
-//labelFontSize           = 8;
+boxOuterWidth           = 430;  // x
+boxOuterDepth           = 300;  // y
+boxOuterHeight          = 80;   // z
+labelFontSize           = 8;
 
-boxOuterWidth           = 80;  // x
-boxOuterDepth           = 60;  // y
-boxOuterHeight          = 30;   // z
-labelFontSize           = 5.5;
+//boxOuterWidth           = 80;  // x
+//boxOuterDepth           = 60;  // y
+//boxOuterHeight          = 30;   // z
+//labelFontSize           = 5.5;
 
-materialThickness       = 3;    // Thickness of the board
+materialThickness       = 3.0;    // Thickness of the board
 fingerDepth             = materialThickness;    // Must always match
 fingerTargetWidth       = fingerDepth*2;   // Actual width Must be calculated to match the actual edge length; Never to be less than this number
-fingerCutCompensation   = 0; // -0.5;    // Makes cutting tool remove a little less (or add if negative) from all edges
+fingerCutCompensation   = 0.2; // -0.5;    // Makes cutting tool remove a little less (or remove a little more if negative) from all edges
 
 airHoleDiameter         = 6;
 airHoleSpacing          = 12;
-
-//boxInnerWidth           = boxOuterWidth - materialThickness*2;
-//boxInnerDepth           = boxOuterDepth - materialThickness;
-//boxInnerHeight          = boxOuterHeight - materialThickness*2;
 
 sideOffsetLeft          = (boxOuterWidth-materialThickness)/2;
 sideOffsetRight         = -sideOffsetLeft;
@@ -84,8 +80,8 @@ module Layer09_BoxWithCutouts()
 {
     difference() {
         Layer01_BoxSolid();
-//        Layer03_BoxCutoutTimerFrame();
-//        Layer04_BoxCutoutAirHoles();
+        Layer03_BoxCutoutTimerFrame();
+        Layer04_BoxCutoutAirHoles();
     }
 }
 
@@ -153,8 +149,13 @@ module FingerMarkers(axis, edgeLength, innerOuterFinger)
     rotate(axis == axisZ ? [0,-90,0] : (axis == axisY ? [0,0,90] : [0,0,0])) {
         for (finger = [innerOuterFinger:2:fingerNumber(edgeLength)-1])
         {
-            translate([(finger+0.5)*fingerWidth(edgeLength)-edgeLength/2,0,0]) cube([fingerWidth(edgeLength)-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01,fingerDepth-fingerCutCompensation+0.01], center=true);
+            translate([(finger+0.5)*fingerWidth(edgeLength)-edgeLength/2,0,0]) cube([fingerWidth(edgeLength)-fingerCutCompensation+0.01,fingerDepth+0.01,fingerDepth+0.01], center=true);
         }
+        // Re-introduce cut-away volume to ends to compensate for fingerCutCompensation
+        for (finger = [innerOuterFinger-2,fingerNumber(edgeLength)+1])
+        {
+            translate([(finger+0.5)*fingerWidth(edgeLength)-edgeLength/2,0,0]) cube([fingerWidth(edgeLength)+0.01,fingerDepth+0.01,fingerDepth+0.01], center=true);
+        }        
     }
 }
 
@@ -266,12 +267,6 @@ module Layer35_SideFrontFlattened()
     }    
 }
 
-//Layer23_SideTopWithFingers();
-//Layer24_SideBottomWithFingers();
-//Layer25_SideFrontWithFingers();
-//Layer21_SideLeftWithFingers();
-//Layer22_SideRightWithFingers();
-
 sideToFlatten = "None";
 echo(sideToFlatten);
 
@@ -285,4 +280,10 @@ else if (sideToFlatten=="Bottom")
     Layer34_SideBottomFlattened();
 else if (sideToFlatten=="Front")
     Layer35_SideFrontFlattened();
-// endif
+else {
+    Layer23_SideTopWithFingers();
+    Layer24_SideBottomWithFingers();
+    Layer25_SideFrontWithFingers();
+    Layer21_SideLeftWithFingers();
+    Layer22_SideRightWithFingers();
+} // endif
