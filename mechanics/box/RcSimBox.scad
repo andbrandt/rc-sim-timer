@@ -21,9 +21,14 @@ outerFinger = 1;
 // Outer box bottom resides on z=0 plane
 // Outer box front is aligned to x axis (y=0) and symmetrical to y axis
 
+timerFrameWidth         = 175;
+timerFrameHeight        = 37;
+
+materialThickness       = 6;    // Thickness of the board
+
 boxOuterWidth           = 430;  // x
 boxOuterDepth           = 310;  // y
-boxOuterHeight          = 50;   // z
+boxOuterHeight          = max(50, timerFrameHeight+materialThickness*4);   // z
 labelFontSize           = 8;
 
 //boxOuterWidth           = 80;  // x
@@ -31,7 +36,6 @@ labelFontSize           = 8;
 //boxOuterHeight          = 30;   // z
 //labelFontSize           = 5.5;
 
-materialThickness       = 6;    // Thickness of the board
 fingerDepth             = materialThickness;    // Must always match
 fingerTargetWidth       = fingerDepth*2;   // Actual width Must be calculated to match the actual edge length; Never to be less than this number
 fingerCutCompensation   = 0; // -0.5;    // Makes cutting tool remove a little less (or add if negative) from all edges
@@ -48,9 +52,6 @@ sideOffsetRight         = -sideOffsetLeft;
 sideOffsetTop           = (boxOuterHeight - materialThickness)/2;
 sideOffsetBottom        = -sideOffsetTop;
 sideOffsetFront         = (-boxOuterDepth + materialThickness)/2;
-
-timerFrameWidth         = 175;
-timerFrameHeight        = 37;
 
 // #################### BASIC BOX SHAPE ###########################
 
@@ -266,7 +267,8 @@ module Layer35_SideFrontFlattened()
     }    
 }
 
-sideToFlatten = "None";
+//sideToFlatten = "None";
+sideToFlatten = "Front";
 echo(sideToFlatten);
 
 if      (sideToFlatten=="None") {
