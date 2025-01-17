@@ -38,7 +38,7 @@ labelFontSize           = 8;
 
 fingerDepth             = materialThickness;    // Must always match
 fingerTargetWidth       = fingerDepth*2;   // Actual width Must be calculated to match the actual edge length; Never to be less than this number
-fingerCutCompensation   = 0; // -0.5;    // Makes cutting tool remove a little less (or add if negative) from all edges
+fingerCutCompensation   = 0; // -0.8;    // Makes cutting tool remove a little less (or add if negative) from all edges
 
 airHoleDiameter         = 8;
 airHoleSpacing          = 12;
@@ -57,15 +57,19 @@ sideOffsetFront         = (-boxOuterDepth + materialThickness)/2;
 
 module Layer01_BoxSolid()
 {    
-//    translate([0,boxOuterDepth/2,boxOuterHeight/2])
     cube([boxOuterWidth,boxOuterDepth,boxOuterHeight], center=true);
 }
 
 module Layer03_BoxCutoutTimerFrame()
 {        
-//    translate([0,boxOuterDepth/2,boxOuterHeight/2]) 
     cube([timerFrameWidth,boxOuterDepth+0.01,timerFrameHeight], center=true);
 }
+
+module Layer03b_BoxCutoutTimerFrameMountHole()
+{        
+    translate([0,(-boxOuterDepth/2+timerFrameHeight)+(boxOuterHeight-timerFrameHeight),-timerFrameHeight]) rotate([90,0,0]) cube([timerFrameWidth,timerFrameHeight+0.01,timerFrameHeight*2], center=true);
+}
+
 
 module Layer04_BoxCutoutAirHoles()
 {        
@@ -86,6 +90,7 @@ module Layer09_BoxWithCutouts()
     difference() {
         Layer01_BoxSolid();
         Layer03_BoxCutoutTimerFrame();
+        Layer03b_BoxCutoutTimerFrameMountHole();        
         Layer04_BoxCutoutAirHoles();
     }
 }
@@ -196,7 +201,19 @@ module Layer23_SideTopWithFingers()
 
 module Layer24_SideBottomWithFingers()
 {     
-     translate([0,0,-(boxOuterHeight-materialThickness)]) Layer23_SideTopWithFingers();
+//     translate([0,0,-(boxOuterHeight-materialThickness)]) Layer23_SideTopWithFingers();
+// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
+    difference() {
+        Layer14_SideBottom();
+
+        // Front edge
+        translate([0,sideOffsetFront,-(boxOuterHeight-materialThickness)/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
+
+        // Side edges
+        for (edgeFactor=[-1:2:+1]) {
+            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2,(-(boxOuterHeight-fingerDepth)/2)]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+        }
+    }
 }
 
 module Layer25_SideFrontWithFingers()
@@ -267,8 +284,7 @@ module Layer35_SideFrontFlattened()
     }    
 }
 
-//sideToFlatten = "None";
-sideToFlatten = "Front";
+sideToFlatten = "None";
 echo(sideToFlatten);
 
 if      (sideToFlatten=="None") {
@@ -289,3 +305,4 @@ else if (sideToFlatten=="Bottom")
 else if (sideToFlatten=="Front")
     Layer35_SideFrontFlattened();
 // endif
+
