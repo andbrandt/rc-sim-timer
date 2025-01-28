@@ -11,7 +11,7 @@
 // Defines for 7 segment display
 #define DISPLAY_7SEG_PIN_CLK 4
 #define DISPLAY_7SEG_PIN_SDA 5
-#define DISPLAY_7SEG_LIGHT_LEVEL_ON 33
+#define DISPLAY_7SEG_LIGHT_LEVEL_ON 75
 #define DISPLAY_7SEG_LIGHT_LEVEL_OFF 0
 
 // Defines for pushbutton w. builtin LED

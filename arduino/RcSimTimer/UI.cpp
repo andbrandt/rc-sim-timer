@@ -77,14 +77,18 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton)
   m_display7Seg   = display7Seg;
   m_ledPushButton = ledPushButton;
 
+  if (!LoadSettings()) {
+    InitSettings();
+  }
+
   m_display7Seg->setColonOn(true);
   m_display7Seg->On();
   m_display7Seg->print(m_versionString);
   delay(3000);
-
-  if (!LoadSettings()) {
-    InitSettings();
-  }
+  m_display7Seg->setColonOn(false);
+  m_display7Seg->print(m_simAppSelectionString[m_settings.simAppSelection]);
+  m_display7Seg->setColonOn(true);
+  delay(3000);
 
   DEBUG_PRINT("Settings");
   DEBUG_PRINT(m_settings.simAppSelection);
@@ -174,7 +178,8 @@ void UI::EventService() {
     case Reset:
       StateSet(SimArmed);
       StopCountDown();
-      m_simulator->Block();
+      m_simulator->InitSim();
+//      m_simulator->BlockSim();
       break;
 
     case Setup:
@@ -192,7 +197,7 @@ void UI::EventService() {
 
         default:
           StateSet(SimulatorSelect);
-          m_simulator->Block();
+          m_simulator->BlockSim();
           break;
       }
       break;
@@ -213,15 +218,15 @@ void UI::EventService() {
         case SimArmed:
           StateSet(SimRunning);
           StartCountDown(m_simDuration_ms[m_settings.simDurationSelection]+1000);  // Also include time = 0 for best user experience
-          m_simulator->Restart();
+          m_simulator->RestartSim();
           break;
         
         case SimRunning:
-          m_simulator->Restart();
+          m_simulator->RestartSim();
           break;
 
         case SimEnding:
-          m_simulator->Restart();
+          m_simulator->RestartSim();
           break;
 
         // cases SimEnding &  SimReArming are updated by countdown events
@@ -244,7 +249,7 @@ void UI::EventService() {
 
     case TimeAtEnd:
       StateSet(SimReArming);
-      m_simulator->Block();
+      m_simulator->BlockSim();
       break;
 
     case TimeArmed:

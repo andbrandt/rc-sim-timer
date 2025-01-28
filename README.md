@@ -24,7 +24,9 @@ Currently supported simulators:
 * Pushbutton to reset simulation when plane gets too far away - or crashes
 * Countdown on 7 segment display to show remaining time
 * Flashing of 7 segment display when time is running out
-* Cool-down period (8-ish seconds) to nudge user to hand over controller to next person
+* Cool-down period (8 seconds) to nudge current user to hand over controller to next person
+* Long-press to select actual RC Simulator and simulation time of 2, 5 or 10 minutes
+* Double-press to toggle between EASY and ACRO models
 
 ---
 # Simulator preparation
@@ -40,15 +42,16 @@ rc-sim-timer will choose an airplane from this list when you toggle between mode
 ## RealFlight Basic
 <img src="readme/7segmentSimAppNameRealFlight_Basic.png" alt="Alt Text" width="100">
 
-When you start the simulator, make sure to select the (???? - three lines down from "Krill Extra") airplane model.
+No preparations needed.
 
-rc-sim-timer will jump up and down between "?????" and "Krill Extra" when you toggle between models using double press.
+rc-sim-timer restores default settings and start up the simulator when the USB plug is inserted.
+
 ## RealFlight v9
 <img src="readme/7segmentSimAppNameRealFlight_9.png" alt="Alt Text" width="100">
 
 Define two airplane favorites in the "edited airplanes" section of the airplane setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second be an aerobatic model.
 
-rc-sim-timer will choose an aircraft from this list when you toggle between models using double press.
+rc-sim-timer will choose an aircraft from this list when you toggle between EASY and ACRO models using double-press.
 
 ---
 Required:
