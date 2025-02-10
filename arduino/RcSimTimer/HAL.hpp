@@ -1,8 +1,6 @@
 #ifndef HAL_h
 #define HAL_h
 
-#include "src/anduinolib/debug/Debug.hpp"
-
 // Defines for PCB
 #define ONBOARD_LED_PIN 17
 #define ONBOARD_LED_LEVEL_ON 0

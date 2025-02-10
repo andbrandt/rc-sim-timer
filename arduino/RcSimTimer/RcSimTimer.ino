@@ -1,15 +1,13 @@
-// #define DEBUG 1
+//#define DEBUG
 #include "src/anduinolib/debug/Debug.hpp"
 
 #include <Arduino.h>
-// #include <Mouse.h>
-// #include <Keyboard.h>
 
 #include "src/anduinolib/ui/Display7Seg.hpp"
 #include "src/anduinolib/ui/LED.hpp"
 #include "src/anduinolib/ui/LedPushButton.hpp"
 #include "src/anduinolib/io/usb-hid/KeyboardCtl.hpp"
-#include "src/anduinolib/io/usb-hid/MouseCtl.hpp"
+//#include "src/anduinolib/io/usb-hid/MouseCtl.hpp"
 #include "src/anduinolib/sys/Time.hpp"
 
 #include "hal.hpp"
@@ -37,15 +35,21 @@ UI            ui;
 
 void setup() 
 {
-  mouseCtl.Begin();
+  bool safeMode = true;
 
-  DEBUG_SETUP();
+  DEBUG_SETUP();  // <- Uncomment #define DEBUG in first line of this file to enable debug printing in ALL project files
   time.Begin();
 
   display7Seg.Begin();
   ledPcb.Blink(true, 250, 250);
-  ledPushButton.Begin(&ui, UiEvent::Setup, UiEvent::Enter, UiEvent::ModelToggle);
-  ui.Begin(&display7Seg, &ledPushButton);
+
+  safeMode = ledPushButton.Begin(&ui, UiEvent::Setup, UiEvent::Enter, UiEvent::ModelToggle);
+
+  if (safeMode) {
+    DEBUG_PRINT("SafeMode");  
+  }
+  KeyboardCtl::Begin(!safeMode);
+  ui.Begin(&display7Seg, &ledPushButton, safeMode);
 }
 
 void loop() 

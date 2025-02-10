@@ -16,7 +16,7 @@ using namespace anduinolib::ui;
 
 class UI : public UiEvent {
   private:
-    const char m_versionString[5] = "v095";
+    const char m_versionString[5] = "v098";
 
     enum UiState {
       SimulatorSelect,
@@ -100,7 +100,7 @@ class UI : public UiEvent {
   public:
 
     UI();
-    void Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton);
+    void Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton, bool safemode);
     void Poll();
     void StateSet(UiState state);
 };

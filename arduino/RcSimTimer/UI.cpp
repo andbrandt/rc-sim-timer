@@ -71,8 +71,7 @@ UI::InitSettings()
   CalcSettingsChkSum();
 }
 
-
-void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton) 
+void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton, bool safemode)
 {
   m_display7Seg   = display7Seg;
   m_ledPushButton = ledPushButton;
@@ -81,10 +80,22 @@ void UI::Begin(Display7Seg *display7Seg, LedPushButton *ledPushButton)
     InitSettings();
   }
 
+  if (safemode) {
+    DEBUG_PRINT("SafeMode");
+    m_display7Seg->setColonOn(false);
+    m_display7Seg->print("SAFE");
+    delay(1000);
+    m_display7Seg->print("mode");
+    delay(1000);
+    m_display7Seg->print("");
+    m_display7Seg->setColonOn(true);
+  }
+  
   m_display7Seg->setColonOn(true);
   m_display7Seg->On();
   m_display7Seg->print(m_versionString);
   delay(3000);
+
   m_display7Seg->setColonOn(false);
   m_display7Seg->print(m_simAppSelectionString[m_settings.simAppSelection]);
   m_display7Seg->setColonOn(true);
@@ -179,7 +190,8 @@ void UI::EventService() {
       StateSet(SimArmed);
       StopCountDown();
       m_simulator->InitSim();
-//      m_simulator->BlockSim();
+      delay(250);
+      m_simulator->BlockSim();
       break;
 
     case Setup:
