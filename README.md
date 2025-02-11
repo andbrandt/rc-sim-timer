@@ -29,6 +29,20 @@ Currently supported simulators:
 * Double-press to toggle between EASY and ACRO models
 
 ---
+# User Interface:
+
+## Push button
+* Short-press: Reset simulation
+* Double-press: Toggle between EASY and ACRO models
+* Long-press:  Enter Setup menu to select RC Simulator and simulation time.
+  * Short-press while in Setup: Toggle selection
+  * Long-press while in Setup: Step to next setting or exit setup 
+
+## 7-segment display
+* Shows remaining simulation time
+* In Setup menu, the display steps through options to be selected
+
+---
 # Simulator preparation
 Depending on your simulator, you may have to do a litte setup to make it work with rc-sim-timer.
 ## Phoenix v4
