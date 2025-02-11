@@ -36,7 +36,10 @@ Currently supported simulators:
 * Double-press: Toggle between EASY and ACRO models
 * Long-press:  Enter Setup menu to select RC Simulator and simulation time.
   * Short-press while in Setup: Toggle selection
-  * Long-press while in Setup: Step to next setting or exit setup 
+  * Long-press while in Setup: Step to next setting or exit setup
+* Press during power-op: SAFE MODE:
+USB Keyboard/mouse inactivated to not interfere with firmware update
+
 
 ## 7-segment display
 * Shows remaining simulation time
