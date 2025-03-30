@@ -217,6 +217,7 @@ void UI::EventService() {
     case Enter:
       switch(m_state) {
         case SimulatorSelect:
+
           if (++m_settings.simAppSelection == simApp_last) m_settings.simAppSelection = 0;
           m_simulator = m_simAppSelection_apps[m_settings.simAppSelection];
           StateSet(m_state);
