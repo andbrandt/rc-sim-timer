@@ -187,11 +187,11 @@ void UI::EventService() {
   auto event = m_eventQueue->dequeue();
   switch (event) {
     case Reset:
-      StateSet(SimArmed);
       StopCountDown();
       m_simulator->InitSim();
       delay(250);
       m_simulator->BlockSim();
+      StateSet(SimArmed);
       break;
 
     case Setup:

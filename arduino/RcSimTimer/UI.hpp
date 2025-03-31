@@ -16,7 +16,7 @@ using namespace anduinolib::ui;
 
 class UI : public UiEvent {
   private:
-    const char m_versionString[5] = "v098";
+    const char m_versionString[5] = "v100";
 
     enum UiState {
       SimulatorSelect,

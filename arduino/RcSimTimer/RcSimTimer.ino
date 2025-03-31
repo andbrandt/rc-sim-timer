@@ -37,7 +37,7 @@ void setup()
 {
   bool safeMode = true;
 
-  DEBUG_SETUP();  // <- Uncomment #define DEBUG in first line of this file to enable debug printing in ALL project files
+  DEBUG_SETUP();  // <- Uncomment #define DEBUG in first line of this file (RcSimTimer.ino) to enable debug printing in ALL project files
   time.Begin();
 
   display7Seg.Begin();
