@@ -2,6 +2,15 @@ rc-sim-timer
 ===
 Project to manage RC Flight Simulators via an Arduino-based control panel.
 
+<img src="readme/SimTimersInUse.jpg" alt="Alt Text" width="768">
+
+Currently supported RC FLight Simulators:
+
+* Phoenix v4
+* RealFlight Basic
+* RealFlight v9
+
+
     Note: This project uses git submodules.
 
     To clone this project use these commands:
@@ -10,13 +19,6 @@ Project to manage RC Flight Simulators via an Arduino-based control panel.
     * cd rc-sim-timer
     * git submodule init
     * git submodule update
-
-
-Currently supported simulators:
-
-* Phoenix v4
-* RealFlight Basic
-* RealFlight v9
 
 ---
 # Features:
@@ -29,15 +31,23 @@ Currently supported simulators:
 * Double-press to toggle between EASY and ACRO models
 
 ---
+# How to start up system:
+
+1. Start up Windows and log in
+2. Connect USB RC controller to the front port of the sim-timer box
+3. Connect the sim-timer box cable
+
+---
 # User Interface:
 
 ## Push button
-* Short-press: Reset simulation
-* Double-press: Toggle between EASY and ACRO models
-* Long-press:  Enter Setup menu to select RC Simulator and simulation time.
+* <b>Light in button</b>: Simulation ready to run - or running. 
+* <b>Short-press</b>: Reset simulation
+* <b>Double-press</b>: Toggle between EASY and ACRO models
+* <b>Long-press</b>:  Enter Setup menu to select RC Simulator and simulation time.
   * Short-press while in Setup: Toggle selection
-  * Long-press while in Setup: Step to next setting or exit setup
-* Press during power-op: SAFE MODE:
+  * Long-press while in Setup: Accept current selection; then step to next setting or exit setup
+* <b>Press during power-op</b>: SAFE MODE:
 USB Keyboard/mouse inactivated to not interfere with firmware update
 
 
@@ -55,21 +65,30 @@ Define two airplane favorites in the aircraft setup menu. Let the first (uppermo
 
 <img src="readme/SimFavoritesPhoenix4.png" alt="Alt Text" width="150">
 
+rc-sim-timer starts up the simulator when the USB plug is inserted.
+
+TODO: Update code to select desired airport when starting.
+
+TODO: Update code to select desired airplanes for easy and acro without requiring sim setup.
+
 rc-sim-timer will choose an airplane from this list when you toggle between models using double press.
 ## RealFlight Basic
 <img src="readme/7segmentSimAppNameRealFlight_Basic.png" alt="Alt Text" width="100">
 
 No preparations needed.
 
-rc-sim-timer restores default settings and start up the simulator when the USB plug is inserted.
+rc-sim-timer restores default settings and starts up the simulator when the USB plug is inserted.
 
 ## RealFlight v9
 <img src="readme/7segmentSimAppNameRealFlight_9.png" alt="Alt Text" width="100">
 
-Define two airplane favorites in the "edited airplanes" section of the airplane setup menu. Let the first (uppermost) be an electric high-wing beginner model and the second be an aerobatic model.
+No preparations needed.
 
-rc-sim-timer will choose an aircraft from this list when you toggle between EASY and ACRO models using double-press.
+rc-sim-timer selects the same airport as in RealFlight Basic and starts up the simulator when the USB plug is inserted.
 
+# Building the mechanics
+
+<img src="readme/RcSimBoxExploded.png" alt="Alt Text" width="768">
 ---
 Required:
 

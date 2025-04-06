@@ -164,72 +164,81 @@ module FingerMarkers(axis, edgeLength, innerOuterFinger)
     }
 }
 
-module Layer21_SideLeftWithFingers()
+
+module Layer21_SideLeftWithFingers(explodePosScale=[1,1,1])
 {
-    difference() {
-        Layer11_SideLeft();
+    translate([(-boxOuterWidth/2)*(explodePosScale.x-1),(explodePosScale.y-1),(explodePosScale.z-1)]) {
+        difference() {
+            Layer11_SideLeft();
 
-        // Front edge
-        translate([(-boxOuterWidth+fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, innerFinger);
+            // Front edge
+            translate([(-boxOuterWidth+fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, innerFinger);
 
-        // Side edges
-        for (zPos=[-sideOffsetTop, +sideOffsetTop]) {
-            translate([(-boxOuterWidth+fingerDepth)/2,fingerDepth/2,zPos]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, outerFinger);
+            // Side edges
+            for (zPos=[-sideOffsetTop, +sideOffsetTop]) {
+                translate([(-boxOuterWidth+fingerDepth)/2,fingerDepth/2,zPos]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, outerFinger);
+            }
         }
     }
 }
 
-module Layer22_SideRightWithFingers()
+module Layer22_SideRightWithFingers(explodePosScale=[1,1,1])
 {
-     translate([boxOuterWidth-materialThickness,0,0]) Layer21_SideLeftWithFingers();    
+    translate([(+boxOuterWidth/2)*(explodePosScale.x-1),(explodePosScale.y-1),(explodePosScale.z-1)]) {
+        translate([boxOuterWidth-materialThickness,0,0]) Layer21_SideLeftWithFingers();
+    }
 }
 
-module Layer23_SideTopWithFingers()
+module Layer23_SideTopWithFingers(explodePosScale=[1,1,1])
 {        
-    difference() {
-        Layer13_SideTop();
+    translate([(explodePosScale.x-1),(explodePosScale.y-1),(+boxOuterHeight/2)*(explodePosScale.z-1)]) {
+        difference() {
+            Layer13_SideTop();
 
-        // Front edge
-        translate([0,sideOffsetFront,(boxOuterHeight-materialThickness)/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
+            // Front edge
+            translate([0,sideOffsetFront,(boxOuterHeight-materialThickness)/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
 
-        // Side edges
-        for (edgeFactor=[-1:2:+1]) {
-            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2,(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+            // Side edges
+            for (edgeFactor=[-1:2:+1]) {
+                translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2,(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+            }
         }
     }
 }
 
-module Layer24_SideBottomWithFingers()
+module Layer24_SideBottomWithFingers(explodePosScale=[1,1,1])
 {     
-//     translate([0,0,-(boxOuterHeight-materialThickness)]) Layer23_SideTopWithFingers();
-// &&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&
-    difference() {
-        Layer14_SideBottom();
+    translate([(explodePosScale.x-1),(explodePosScale.y-1),(-boxOuterHeight/2)*(explodePosScale.z-1)]) {
+        difference() {
+            Layer14_SideBottom();
 
-        // Front edge
-        translate([0,sideOffsetFront,-(boxOuterHeight-materialThickness)/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
+            // Front edge
+            translate([0,sideOffsetFront,-(boxOuterHeight-materialThickness)/2]) FingerMarkers(axisX, boxOuterWidth, innerFinger);
 
-        // Side edges
-        for (edgeFactor=[-1:2:+1]) {
-            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2,(-(boxOuterHeight-fingerDepth)/2)]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+            // Side edges
+            for (edgeFactor=[-1:2:+1]) {
+                translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,fingerDepth/2,(-(boxOuterHeight-fingerDepth)/2)]) FingerMarkers(axisY, boxOuterDepth-fingerDepth, innerFinger);
+            }
         }
     }
 }
 
-module Layer25_SideFrontWithFingers()
+module Layer25_SideFrontWithFingers(explodePosScale=[1,1,1])
 {        
-    difference() {
-        Layer15_SideFront();
-        
-        // Bottom and Top edges
-        for (edgeFactor=[-1,+1]) {
-            translate([0,sideOffsetFront,edgeFactor*(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisX, boxOuterWidth, 
-                outerFinger);
-        }        
-        
-        // Left and Right edges
-        for (edgeFactor=[-1,+1]) {
-            translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, outerFinger);
+    translate([(explodePosScale.x-1),(-boxOuterDepth/2)*(explodePosScale.y-1),(explodePosScale.z-1)]) {
+        difference() {
+            Layer15_SideFront();
+            
+            // Bottom and Top edges
+            for (edgeFactor=[-1,+1]) {
+                translate([0,sideOffsetFront,edgeFactor*(boxOuterHeight-fingerDepth)/2]) FingerMarkers(axisX, boxOuterWidth, 
+                    outerFinger);
+            }        
+            
+            // Left and Right edges
+            for (edgeFactor=[-1,+1]) {
+                translate([edgeFactor*(boxOuterWidth-fingerDepth)/2,sideOffsetFront,0]) FingerMarkers(axisZ, boxOuterHeight, outerFinger);
+            }
         }
     }
 }
@@ -287,12 +296,14 @@ module Layer35_SideFrontFlattened()
 sideToFlatten = "None";
 echo(sideToFlatten);
 
+explodedDrawingFactor=2.5*[0.5,0.8,1];
+
 if      (sideToFlatten=="None") {
-    Layer23_SideTopWithFingers();
-    Layer24_SideBottomWithFingers();
-    Layer25_SideFrontWithFingers();
-    Layer21_SideLeftWithFingers();
-    Layer22_SideRightWithFingers();
+    Layer23_SideTopWithFingers(explodedDrawingFactor);
+    Layer24_SideBottomWithFingers(explodedDrawingFactor);
+    Layer25_SideFrontWithFingers(explodedDrawingFactor);
+    Layer21_SideLeftWithFingers(explodedDrawingFactor);
+    Layer22_SideRightWithFingers(explodedDrawingFactor);
 }
 else if      (sideToFlatten=="Left")
     Layer31_SideLeftFlattened();
