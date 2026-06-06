@@ -1,6 +1,6 @@
 rc-sim-timer
 ===
-Project to manage RC Flight Simulators via an Arduino-based control panel.
+Project to manage RC Flight Simulators via an Arduino-based push button UI.
 
 <img src="readme/SimTimersInUse.jpg" alt="Alt Text" width="768">
 
