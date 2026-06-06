@@ -89,8 +89,8 @@ rc-sim-timer selects the same airport as in RealFlight Basic and starts up the s
 # Building the mechanics
 
 <img src="readme/RcSimBoxExploded.png" alt="Alt Text" width="768">
----
-Bill of Material (BOM):
+
+## Bill of Material (BOM)
 
 * Laser cut 6mm plywood components for enclosure (Link to design & files)
 * 3D printed UI panel (Link to design & files)
@@ -100,7 +100,7 @@ Bill of Material (BOM):
 * Micro USB hub PCB (TODO: Link)
 * Female USB connector
 
-## Mounting electronics in the 3D printed UI panel.
+## Mounting electronics in the 3D printed UI panel
 
 Start gluing the push button, arduino and USB connector into the recesses of the front panel. Push the two mounting rods sideways in to lock the USB connector into position.
 
