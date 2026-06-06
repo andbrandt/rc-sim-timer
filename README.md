@@ -90,11 +90,35 @@ rc-sim-timer selects the same airport as in RealFlight Basic and starts up the s
 
 <img src="readme/RcSimBoxExploded.png" alt="Alt Text" width="768">
 ---
-Required:
+Bill of Material (BOM):
 
-* Arduino with full USB mouse+keyboard HID support like Leonardo or Arduino Pro Micro
-* Push button with built-in light for UI effects
+* Laser cut 6mm plywood components for enclosure (Link to design & files)
+* 3D printed UI panel (Link to design & files)
+* Arduino Pro Micro
+* Push button with built-in light for UI effects (TODO: Link)
 * 4-digit 7-segment I2C display
+* Micro USB hub PCB (TODO: Link)
+* Female USB connector
+
+## Mounting electronics in the 3D printed UI panel.
+
+Start gluing the push button, arduino and USB connector into the recesses of the front panel. Push the two mounting rods sideways in to lock the USB connector into position.
+
+<img src="readme/UI_panel_1.jpg" alt="Alt Text" width="768">
+
+TODO
+
+<img src="readme/UI_panel_2.jpg" alt="Alt Text" width="768">
+
+TODO
+
+<img src="readme/UI_panel_3.jpg" alt="Alt Text" width="768">
+
+TODO
+
+<img src="readme/UI_panel_4.jpg" alt="Alt Text" width="768">
+
+
 ---
 **WARNING #1**
 

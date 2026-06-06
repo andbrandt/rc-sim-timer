@@ -296,7 +296,8 @@ module Layer35_SideFrontFlattened()
 sideToFlatten = "None";
 echo(sideToFlatten);
 
-explodedDrawingFactor=2.5*[0.5,0.8,1];
+//explodedDrawingFactor=2.5*[0.5,0.8,1];
+explodedDrawingFactor=1.005*[1,1,1];
 
 if      (sideToFlatten=="None") {
     Layer23_SideTopWithFingers(explodedDrawingFactor);
